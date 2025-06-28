@@ -14,8 +14,10 @@ import DashboardPage from "./pages/DashboardPage";
 import MedicationPage from "./pages/MedicationPage";
 import VaccinationPage from "./pages/VaccinationPage";
 import TaskPage from "./pages/TaskPage";
+import PetProfilePage from "./pages/PetProfilePage";
 
-import Navbar from "./components/Navbar/Navbar";
+import TopNavbar from "./components/Navbar/TopNavbar";
+import BottomNavbar from "./components/Navbar/BottomNavbar";
 import Footer from "./components/Footer";
 import IsPrivate from "./components/IsPrivate/IsPrivate";
 import IsAnon from "./components/IsAnon/IsAnon";
@@ -23,7 +25,7 @@ import IsAnon from "./components/IsAnon/IsAnon";
 function App() {
   return (
     <div className="App">
-      <Navbar />
+      <TopNavbar />
 
 {/* public routes */}
       <Routes>
@@ -47,6 +49,14 @@ function App() {
         />
 
 {/* private routes */}
+  <Route
+          path="/petprofile"
+          element={
+            <IsPrivate>
+              <PetProfilePage />
+            </IsPrivate>
+          }
+        />
         <Route
           path="/profile"
           element={
@@ -115,7 +125,7 @@ function App() {
         <Route path="*" element={<NotFoundPage />} />
 
       </Routes>
-      
+        <BottomNavbar />
       <Footer />
     </div>
   );
