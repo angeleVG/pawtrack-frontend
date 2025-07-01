@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import authService from "../services/auth.service";
+import { Container, TextField, Typography, Button, Box, Alert, } from "@mui/material";
+
 
 function SignupPage() {
   const [email, setEmail] = useState("");
@@ -19,18 +21,8 @@ function SignupPage() {
     // Create an object representing the request body
     const requestBody = { email, password, name };
 
-    // Send a request to the server using axios
-    /* 
-    const authToken = localStorage.getItem("authToken");
-    axios.post(
-      `${process.env.REACT_APP_SERVER_URL}/auth/signup`, 
-      requestBody, 
-      { headers: { Authorization: `Bearer ${authToken}` },
-    })
-    .then((response) => {})
-    */
-
-    // Or using a service
+  
+    // using a service
     authService
       .signup(requestBody)
       .then((response) => {
@@ -45,32 +37,63 @@ function SignupPage() {
   };
 
   return (
-    <div className="SignupPage">
-      <h1>Sign Up</h1>
+    <Container maxWidth="xs" sx={{ mt: 8 }}>
+      <Box
+        component="form"
+        onSubmit={handleSignupSubmit}
+        sx={{
+          display: "grid",
+          gap: 2,
+          bgcolor: "#fff",
+          p: 4,
+          borderRadius: 3,
+          boxShadow: 3,
+        }}
+      >
+        <Typography variant="h4" align="center" sx={{ color: "#00bfa6", fontWeight: 600 }}>
+Sign Up</Typography>
 
-      <form onSubmit={handleSignupSubmit}>
-        <label>Email:</label>
-        <input type="email" name="email" value={email} onChange={handleEmail} />
+  <TextField
+    label="Email"
+    type="email"
+    name="email"
+    value={email}
+    onChange={handleEmail}
+    required
+  />
 
-        <label>Password:</label>
-        <input
-          type="password"
-          name="password"
-          value={password}
-          onChange={handlePassword}
-        />
+   <TextField
+    label="Password"
+    type="password"
+    name="password"
+    value={password}
+    onChange={handlePassword}
+    required
+  />
 
-        <label>Name:</label>
-        <input type="text" name="name" value={name} onChange={handleName} />
+   <TextField
+    label="Name"
+    type="text"
+    name="name"
+    value={name}
+    onChange={handleName}
+    required
+  />
 
-        <button type="submit">Sign Up</button>
-      </form>
+   <Button type="submit" variant="contained" sx={{ backgroundColor: "#00bfa6" }}>
+    Sign Up</Button>
 
-      {errorMessage && <p className="error-message">{errorMessage}</p>}
+    {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
 
-      <p>Already have account?</p>
-      <Link to={"/login"}> Login</Link>
-    </div>
+        <Typography variant="body2" align="center">
+          Already have an account?{" "}
+          <Link to="/login" style={{ textDecoration: "none", color: "#00bfa6", fontWeight: 500 }}>
+            Log in
+          </Link>
+        </Typography>
+      </Box>
+    </Container>
+
   );
 }
 
