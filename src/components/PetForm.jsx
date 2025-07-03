@@ -1,39 +1,69 @@
 import { useState } from "react";
-import { TextField, Button, Box } from "@mui/material";
+import { TextField, Button, Box, Typography } from "@mui/material";
+import axios from "axios";
 
-function PetForm({ initialData = {}, onSubmit }) {
-  const [name, setName] = useState(initialData.name || "");
-  const [gender, setGender] = useState(initialData.gender || "");
-  const [birthDate, setBirthDate] = useState(initialData.birthDate || "");
+function PetForm({ onSubmitSuccess }) {
+  const [formData, setFormData] = useState({
+    name: "",
+    gender: "",
+    birthDate: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit?.({ name, gender, birthDate });
+    axios
+      .post("/api/pets", formData)
+      .then((response) => {
+        onSubmitSuccess(response.data);
+      })
+      .catch((error) => {
+        console.error("Error creating pet:", error);
+      });
   };
 
   return (
-    <Box component="form" onSubmit={handleSubmit} sx={{ display: "grid", gap: 2, mt: 4 }}>
+    <Box
+      component="form"
+      onSubmit={handleSubmit}
+      display="flex"
+      flexDirection="column"
+      gap={2}
+      maxWidth={300}
+      width="100%"
+    >
+      <Typography variant="h6" align="center">Add your first pet</Typography>
       <TextField
         label="Name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
+        name="name"
+        value={formData.name}
+        onChange={handleChange}
         required
+        fullWidth
       />
       <TextField
         label="Gender"
-        value={gender}
-        onChange={(e) => setGender(e.target.value)}
+        name="gender"
+        value={formData.gender}
+        onChange={handleChange}
         required
+        fullWidth
       />
       <TextField
         label="Birth Date"
+        name="birthDate"
         type="date"
-        InputLabelProps={{ shrink: true }}
-        value={birthDate}
-        onChange={(e) => setBirthDate(e.target.value)}
+        value={formData.birthDate}
+        onChange={handleChange}
         required
+        fullWidth
+        InputLabelProps={{ shrink: true }}
       />
-      <Button type="submit" variant="contained">
+      <Button type="submit" variant="contained" fullWidth>
         Save Pet
       </Button>
     </Box>
