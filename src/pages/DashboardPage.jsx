@@ -36,13 +36,13 @@ function DashboardPage() {
           <Avatar
             src={pet.image || "https://cdn-icons-png.flaticon.com/512/616/616408.png"}
             alt="pet avatar"
-            sx={{ width: 80, height: 80, mb: 2 }}
+            sx={{ width: 100, height: 100, mb: 2 }}
           >
             <Pets />
           </Avatar>
           <Typography variant="h6" align="center" sx={{ color: "#00bfa6" }}>{pet.name}</Typography>
-          <Typography variant="body2" align="center" color="text.secondary">
-            {pet.gender}, Birthday: {new Date(pet.birthDate).toLocaleDateString()}
+          <Typography variant="body2" align="center" color="text.secondary"> {pet.gender} •
+            {pet.breed}, Birthday: {new Date(pet.birthDate).toLocaleDateString()}
           </Typography>
 
           <Grid container spacing={2} justifyContent="center" sx={{ mt: 2 }}>

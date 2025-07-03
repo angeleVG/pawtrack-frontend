@@ -28,8 +28,16 @@ function PetForm({ onSubmitSuccess }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+ const storedToken = localStorage.getItem("authToken");
+
     axios
-      .post("/api/pet", formData)
+    
+      .post("/api/pet", formData, {
+    headers: {
+      Authorization: `Bearer ${storedToken}`,
+    },
+  })
       .then((response) => {
         onSubmitSuccess(response.data);
       })
