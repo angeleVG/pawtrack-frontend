@@ -38,9 +38,9 @@ class AuthService {
   };
 
   // DashBoard: retrieves the current user's pet profile
-// Sends a GET request to /api/pets/my-pet with stored JWT
+// Sends a GET request to /api/pet/my-pet with stored JWT
   getPetProfile = () => {
-  return this.api.get("/api/pets/my-pet");
+  return this.api.get("/api/pet/my-pet");
 };
 }
 
