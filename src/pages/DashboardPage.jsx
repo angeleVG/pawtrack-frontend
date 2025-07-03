@@ -5,10 +5,10 @@ import { AuthContext } from "../context/auth.context";
 import { useNavigate } from "react-router-dom";
 import authService from "../services/auth.service";
 import axios from "axios";
+import PetForm from "../components/PetForm";
 
 function DashboardPage() {
   const [pet, setPet] = useState(null);
-   const [formData, setFormData] = useState({ name: "", gender: "", birthDate: "" });
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
 
@@ -17,18 +17,6 @@ function DashboardPage() {
       .then(response => setPet(response.data))
       .catch(() => setPet(null));
   }, []);
-
-    const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-   const handleSubmit = (e) => {
-    e.preventDefault();
-    axios
-      .post("/api/pets", formData)
-      .then((response) => setPet(response.data))
-      .catch((err) => console.error(err));
-  };
 
    const iconTiles = [
     { icon: <MonitorWeight fontSize="large" />, label: "Weight", route: "/weight" },
