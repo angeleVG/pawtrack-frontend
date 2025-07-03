@@ -36,6 +36,12 @@ class AuthService {
     // same as
     // return axios.post("http://localhost:5005/auth/verify");
   };
+
+  // DashBoard: retrieves the current user's pet profile
+// Sends a GET request to /api/pets/my-pet with stored JWT
+  getPetProfile = () => {
+  return this.api.get("/api/pets/my-pet");
+};
 }
 
 // Create one instance (object) of the service

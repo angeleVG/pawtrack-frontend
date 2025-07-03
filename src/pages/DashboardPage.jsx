@@ -50,7 +50,7 @@ function DashboardPage() {
             {pet.name}
           </Typography>
           <Typography variant="body2" align="center" color="text.secondary">
-            {pet.gender}, Birthday: {new Date(pet.birthday).toLocaleDateString()}
+            {pet.gender}, Birthday: {new Date(pet.birthDate).toLocaleDateString()}
           </Typography>
 
           <Grid container spacing={2} mt={2} justifyContent="center">
