@@ -3,6 +3,8 @@ import { TextField, Button, Box, Typography, FormControl, FormLabel, RadioGroup,
   Radio, Select, MenuItem, InputLabel
 } from "@mui/material";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
 
 function PetForm({ onSubmitSuccess }) {
       const [formData, setFormData] = useState({
@@ -12,6 +14,7 @@ function PetForm({ onSubmitSuccess }) {
   birthDate: "",
 });
 
+const navigate = useNavigate();
   const [breeds, setBreeds] = useState([]);
 
   useEffect(() => {
@@ -40,6 +43,7 @@ function PetForm({ onSubmitSuccess }) {
   })
       .then((response) => {
         onSubmitSuccess(response.data);
+          navigate("/dashboard");
       })
       .catch((error) => {
         console.error("Error creating pet:", error);

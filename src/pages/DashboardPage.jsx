@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import authService from "../services/auth.service";
 import axios from "axios";
 import PetForm from "../components/PetForm";
+import React from "react";
 
 function DashboardPage() {
   const [pet, setPet] = useState(null);
@@ -13,19 +14,74 @@ function DashboardPage() {
   const { user } = useContext(AuthContext);
 
  useEffect(() => {
-    authService.getPetProfile()
-      .then(response => setPet(response.data))
-      .catch(() => setPet(null));
-  }, []);
+   const storedToken = localStorage.getItem("authToken");
 
-   const iconTiles = [
-    { icon: <MonitorWeight fontSize="large" />, label: "Weight", route: "/weight" },
-    { icon: <Restaurant fontSize="large" />, label: "Food", route: "/food" },
-    { icon: <Medication fontSize="large" />, label: "Medications", route: "/medications" },
-    { icon: <Vaccines fontSize="large" />, label: "Vaccinations", route: "/vaccinations" },
-    { icon: <CheckCircle fontSize="large" />, label: "Tasks", route: "/tasks" },
-    { icon: <Contacts fontSize="large" />, label: "Contacts", route: "/contacts" },
-  ];
+  axios.get("/api/pet", {
+    headers: {
+      Authorization: `Bearer ${storedToken}`,
+    },
+  })
+    .then((res) => {
+      if (res.data.length > 0) {
+        setPet(res.data[0]); 
+      } else {
+        setPet(null);
+      }
+    })
+    .catch((err) => {
+      console.error("Error fetching pet:", err);
+      setPet(null);
+    });
+}, []);
+
+  //  const iconTiles = [
+  //   { icon: <MonitorWeight fontSize="large" />, label: "Weight", route: "/weight" },
+  //   { icon: <Restaurant fontSize="large" />, label: "Food", route: "/food" },
+  //   { icon: <Medication fontSize="large" />, label: "Medications", route: "/medications" },
+  //   { icon: <Vaccines fontSize="large" />, label: "Vaccinations", route: "/vaccinations" },
+  //   { icon: <CheckCircle fontSize="large" />, label: "Tasks", route: "/tasks" },
+  //   { icon: <Contacts fontSize="large" />, label: "Contacts", route: "/contacts" },
+  // ];
+
+  const iconTiles = [
+  {
+    icon: <MonitorWeight />,
+    label: "Weight",
+    route: "/weight",
+    bgColor: "#e6f0ff", // light blue
+  },
+  {
+    icon: <Vaccines />,
+    label: "Vaccinations",
+    route: "/vaccinations",
+    bgColor: "#e6fff3", // minty green
+  },
+  {
+    icon: <Restaurant />,
+    label: "Food",
+    route: "/food",
+    bgColor: "#fff7e6", // light yellow
+  },
+  {
+    icon: <Contacts />,
+    label: "Contacts",
+    route: "/contacts",
+    bgColor: "#e6f9ff", // light aqua
+  },
+  {
+    icon: <Medication />,
+    label: "Medications",
+    route: "/medications",
+    bgColor: "#f0e6ff", // licht purple
+  },
+  {
+    icon: <CheckCircle />,
+    label: "Tasks",
+    route: "/tasks",
+    bgColor: "#f5f5f5", // light grey
+  },
+];
+
 
   return (
      <Box p={2} display="flex" flexDirection="column" alignItems="center"   sx={{ backgroundColor: "#f7fdfc", minHeight: "100vh" }}>
@@ -46,19 +102,36 @@ function DashboardPage() {
           </Typography>
 
           <Grid container spacing={2} justifyContent="center" sx={{ mt: 2 }}>
-            {iconTiles.map(({ icon, label, route }) => (
-              <Grid item xs={6} key={label}>
-                <Card onClick={() => navigate(route)} sx={{ cursor: "pointer" }}>
-                  <CardActionArea>
-                    <CardContent sx={{ textAlign: "center" }}>
-                      {icon}
-                      <Typography variant="body2">{label}</Typography>
-                    </CardContent>
-                  </CardActionArea>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
+            {iconTiles.map(({ icon, label, route, bgColor }) => (
+              <Grid item xs={6} sm={4} key={label}>
+                <Card onClick={() => navigate(route)} sx={{ 
+                    backgroundColor: bgColor,
+                     height: 120,
+          borderRadius: 2,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          cursor: "pointer",
+        }}>
+         <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            textAlign: "center",
+          }}
+        >
+          {React.cloneElement(icon, {
+            sx: { fontSize: 36, mb: 1, color: "#2c3e50" }, // donkere neutrale tekstkleur
+          })}
+          <Typography variant="body2" fontWeight={500} sx={{ color: "#2c3e50" }}>
+            {label}
+          </Typography>
+        </Box>
+      </Card>
+    </Grid>
+  ))}
+</Grid>
         </>
       )}
     </Box>
