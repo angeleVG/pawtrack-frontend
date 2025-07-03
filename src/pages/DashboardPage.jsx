@@ -28,7 +28,7 @@ function DashboardPage() {
   ];
 
   return (
-     <Box p={2} display="flex" flexDirection="column" alignItems="center">
+     <Box p={2} display="flex" flexDirection="column" alignItems="center"   sx={{ backgroundColor: "#f7fdfc", minHeight: "100vh" }}>
       {!pet ? (
          <PetForm onSubmitSuccess={(newPet) => setPet(newPet)} />
       ) : (
@@ -40,15 +40,15 @@ function DashboardPage() {
           >
             <Pets />
           </Avatar>
-          <Typography variant="h6" align="center">{pet.name}</Typography>
+          <Typography variant="h6" align="center" sx={{ color: "#00bfa6" }}>{pet.name}</Typography>
           <Typography variant="body2" align="center" color="text.secondary">
             {pet.gender}, Birthday: {new Date(pet.birthDate).toLocaleDateString()}
           </Typography>
 
-          <Grid container spacing={2} mt={2} justifyContent="center">
+          <Grid container spacing={2} justifyContent="center" sx={{ mt: 2 }}>
             {iconTiles.map(({ icon, label, route }) => (
               <Grid item xs={6} key={label}>
-                <Card onClick={() => navigate(route)}>
+                <Card onClick={() => navigate(route)} sx={{ cursor: "pointer" }}>
                   <CardActionArea>
                     <CardContent sx={{ textAlign: "center" }}>
                       {icon}

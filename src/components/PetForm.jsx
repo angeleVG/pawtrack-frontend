@@ -1,13 +1,23 @@
 import { useState } from "react";
-import { TextField, Button, Box, Typography } from "@mui/material";
+import {
+  TextField,
+  Button,
+  Box,
+  Typography,
+  FormControl,
+  FormLabel,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+} from "@mui/material";
 import axios from "axios";
 
 function PetForm({ onSubmitSuccess }) {
-  const [formData, setFormData] = useState({
-    name: "",
-    gender: "",
-    birthDate: "",
-  });
+      const [formData, setFormData] = useState({
+  name: "",
+  gender: "male",
+  birthDate: "",
+});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -25,6 +35,7 @@ function PetForm({ onSubmitSuccess }) {
         console.error("Error creating pet:", error);
       });
   };
+  
 
   return (
     <Box
@@ -36,7 +47,10 @@ function PetForm({ onSubmitSuccess }) {
       maxWidth={300}
       width="100%"
     >
-      <Typography variant="h6" align="center">Add your first pet</Typography>
+      <Typography variant="h6" align="center" sx={{ color: "#00bfa6" }}>
+        Add your first pet
+      </Typography>
+
       <TextField
         label="Name"
         name="name"
@@ -45,14 +59,19 @@ function PetForm({ onSubmitSuccess }) {
         required
         fullWidth
       />
-      <TextField
-        label="Gender"
-        name="gender"
-        value={formData.gender}
-        onChange={handleChange}
-        required
-        fullWidth
-      />
+      <FormControl component="fieldset">
+        <FormLabel component="legend">Gender</FormLabel>
+        <RadioGroup
+          row
+          name="gender"
+          value={formData.gender}
+          onChange={handleChange}
+        >
+          <FormControlLabel value="male" control={<Radio />} label="Male" />
+          <FormControlLabel value="female" control={<Radio />} label="Female" />
+        </RadioGroup>
+      </FormControl>
+
       <TextField
         label="Birth Date"
         name="birthDate"
@@ -63,7 +82,11 @@ function PetForm({ onSubmitSuccess }) {
         fullWidth
         InputLabelProps={{ shrink: true }}
       />
-      <Button type="submit" variant="contained" fullWidth>
+      <Button type="submit" variant="contained" fullWidth
+        sx={{
+          backgroundColor: "#00bfa6",
+          "&:hover": { backgroundColor: "#00a896" },
+        }}>
         Save Pet
       </Button>
     </Box>
