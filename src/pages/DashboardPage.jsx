@@ -4,18 +4,32 @@ import { Pets, Restaurant, Medication, Vaccines, CheckCircle, Contacts, MonitorW
 import { AuthContext } from "../context/auth.context";
 import { useNavigate } from "react-router-dom";
 import authService from "../services/auth.service";
+import axios from "axios";
 
 function DashboardPage() {
   const [pet, setPet] = useState(null);
+   const [formData, setFormData] = useState({ name: "", gender: "", birthDate: "" });
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
 
  useEffect(() => {
-    // Fetch pet data
     authService.getPetProfile()
       .then(response => setPet(response.data))
       .catch(() => setPet(null));
   }, []);
+
+
+    const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+   const handleSubmit = (e) => {
+    e.preventDefault();
+    axios
+      .post("/api/pets", formData)
+      .then((response) => setPet(response.data))
+      .catch((err) => console.error(err));
+  };
 
    const iconTiles = [
     { icon: <MonitorWeight fontSize="large" />, label: "Weight", route: "/weight" },
@@ -29,14 +43,7 @@ function DashboardPage() {
   return (
      <Box p={2} display="flex" flexDirection="column" alignItems="center">
       {!pet ? (
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => navigate("/pets/create")}
-          sx={{ mt: 4 }}
-        >
-          Add your first pet
-        </Button>
+         <PetForm onSubmitSuccess={(newPet) => setPet(newPet)} />
       ) : (
         <>
           <Avatar
@@ -46,9 +53,7 @@ function DashboardPage() {
           >
             <Pets />
           </Avatar>
-          <Typography variant="h6" align="center">
-            {pet.name}
-          </Typography>
+          <Typography variant="h6" align="center">{pet.name}</Typography>
           <Typography variant="body2" align="center" color="text.secondary">
             {pet.gender}, Birthday: {new Date(pet.birthDate).toLocaleDateString()}
           </Typography>
@@ -56,9 +61,9 @@ function DashboardPage() {
           <Grid container spacing={2} mt={2} justifyContent="center">
             {iconTiles.map(({ icon, label, route }) => (
               <Grid item xs={6} key={label}>
-                <Card onClick={() => navigate(route)} sx={{ textAlign: "center" }}>
+                <Card onClick={() => navigate(route)}>
                   <CardActionArea>
-                    <CardContent>
+                    <CardContent sx={{ textAlign: "center" }}>
                       {icon}
                       <Typography variant="body2">{label}</Typography>
                     </CardContent>
