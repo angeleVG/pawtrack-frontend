@@ -34,6 +34,32 @@ function DashboardPage() {
     });
 }, []);
 
+// replacing avatar for image
+const handleImageUpload = (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const formData = new FormData();
+  formData.append("image", file);
+
+  const storedToken = localStorage.getItem("authToken");
+
+  axios
+    .post("/api/pet/upload", formData, {
+      headers: {
+        Authorization: `Bearer ${storedToken}`,
+        "Content-Type": "multipart/form-data",
+      },
+    })
+    .then((res) => {
+      const newImageUrl = res.data.imageUrl;
+      setPet((prevPet) => ({ ...prevPet, image: newImageUrl }));
+    })
+    .catch((err) => {
+      console.error("Error uploading image:", err);
+    });
+};
+
   const iconTiles = [
   {
     icon: <MonitorWeightOutlined />,
@@ -81,13 +107,33 @@ function DashboardPage() {
       ) : (
         <>
          <Box mb={4} display="flex" flexDirection="column" alignItems="center">
-          <Avatar
-            src={pet.image || "https://cdn-icons-png.flaticon.com/512/616/616408.png"}
-            alt="pet avatar"
-            sx={{ width: 100, height: 100, mb: 2 }}
-          >
-            <Pets />
-          </Avatar>
+         <label htmlFor="avatar-upload">
+  <input
+    id="avatar-upload"
+    type="file"
+    accept="image/*"
+    style={{ display: "none" }}
+    onChange={handleImageUpload}
+  />
+  <Avatar
+    src={pet.image || "https://cdn-icons-png.flaticon.com/512/616/616408.png"}
+    alt="pet avatar"
+    sx={{
+      width: 100,
+      height: 100,
+      mb: 2,
+      cursor: "pointer",
+      border: "2px solid #00bfa6",
+      transition: "0.3s",
+      "&:hover": {
+        opacity: 0.8,
+      },
+    }}
+  >
+    <Pets />
+  </Avatar>
+</label>
+
           <Typography variant="h5" align="center" sx={{ color: "#00bfa6", fontWeight: 600 }}>{pet.name}</Typography>
           <Typography variant="body1" align="center" color="text.secondary"> {pet.gender} •
             {pet.breed}, Birthday: {new Date(pet.birthDate).toLocaleDateString()}
