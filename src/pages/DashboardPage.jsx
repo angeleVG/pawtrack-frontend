@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import { Box, Avatar, Typography, Grid, Button, Card, CardActionArea, CardContent } from "@mui/material";
-import { Pets, Restaurant, Medication, Vaccines, CheckCircle, Contacts, MonitorWeight } from "@mui/icons-material";
+import { Pets, Restaurant, Medication, Vaccines, MedicationOutlined, PetsOutlined, CheckCircle, ContactPhoneOutlined, Contacts, MonitorWeight, RestaurantOutlined, VaccinesOutlined, MonitorWeightOutlined } from "@mui/icons-material";
 import { AuthContext } from "../context/auth.context";
 import { useNavigate } from "react-router-dom";
 import authService from "../services/auth.service";
@@ -34,50 +34,41 @@ function DashboardPage() {
     });
 }, []);
 
-  //  const iconTiles = [
-  //   { icon: <MonitorWeight fontSize="large" />, label: "Weight", route: "/weight" },
-  //   { icon: <Restaurant fontSize="large" />, label: "Food", route: "/food" },
-  //   { icon: <Medication fontSize="large" />, label: "Medications", route: "/medications" },
-  //   { icon: <Vaccines fontSize="large" />, label: "Vaccinations", route: "/vaccinations" },
-  //   { icon: <CheckCircle fontSize="large" />, label: "Tasks", route: "/tasks" },
-  //   { icon: <Contacts fontSize="large" />, label: "Contacts", route: "/contacts" },
-  // ];
-
   const iconTiles = [
   {
-    icon: <MonitorWeight />,
+    icon: <MonitorWeightOutlined />,
     label: "Weight",
     route: "/weight",
     bgColor: "#e6f0ff", // light blue
   },
   {
-    icon: <Vaccines />,
+    icon: <VaccinesOutlined />,
     label: "Vaccinations",
     route: "/vaccinations",
     bgColor: "#e6fff3", // minty green
   },
   {
-    icon: <Restaurant />,
+    icon: <RestaurantOutlined />,
     label: "Food",
     route: "/food",
     bgColor: "#fff7e6", // light yellow
   },
   {
-    icon: <Contacts />,
+    icon: <ContactPhoneOutlined />,
     label: "Contacts",
     route: "/contacts",
     bgColor: "#e6f9ff", // light aqua
   },
   {
-    icon: <Medication />,
+    icon: <MedicationOutlined />,
     label: "Medications",
     route: "/medications",
-    bgColor: "#f0e6ff", // licht purple
+    bgColor: "#f0e6ff", // light purple
   },
   {
-    icon: <CheckCircle />,
-    label: "Tasks",
-    route: "/tasks",
+    icon: <PetsOutlined />,
+    label: "Activity",
+    route: "/activity",
     bgColor: "#f5f5f5", // light grey
   },
 ];
@@ -89,6 +80,7 @@ function DashboardPage() {
          <PetForm onSubmitSuccess={(newPet) => setPet(newPet)} />
       ) : (
         <>
+         <Box mb={4} display="flex" flexDirection="column" alignItems="center">
           <Avatar
             src={pet.image || "https://cdn-icons-png.flaticon.com/512/616/616408.png"}
             alt="pet avatar"
@@ -96,42 +88,60 @@ function DashboardPage() {
           >
             <Pets />
           </Avatar>
-          <Typography variant="h6" align="center" sx={{ color: "#00bfa6" }}>{pet.name}</Typography>
-          <Typography variant="body2" align="center" color="text.secondary"> {pet.gender} •
+          <Typography variant="h5" align="center" sx={{ color: "#00bfa6", fontWeight: 600 }}>{pet.name}</Typography>
+          <Typography variant="body1" align="center" color="text.secondary"> {pet.gender} •
             {pet.breed}, Birthday: {new Date(pet.birthDate).toLocaleDateString()}
           </Typography>
+          </Box>
 
-          <Grid container spacing={2} justifyContent="center" sx={{ mt: 2 }}>
+  <Grid container spacing={2} justifyContent="center">
             {iconTiles.map(({ icon, label, route, bgColor }) => (
-              <Grid item xs={6} sm={4} key={label}>
-                <Card onClick={() => navigate(route)} sx={{ 
+              <Grid item xs={6} key={label}>
+                <Card
+                  sx={{
+                    width: 130,
+                    height: 130,
+                    borderRadius: 2,
                     backgroundColor: bgColor,
-                     height: 120,
-          borderRadius: 2,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          cursor: "pointer",
-        }}>
-         <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            textAlign: "center",
-          }}
-        >
-          {React.cloneElement(icon, {
-            sx: { fontSize: 36, mb: 1, color: "#2c3e50" }, // donkere neutrale tekstkleur
-          })}
-          <Typography variant="body2" fontWeight={500} sx={{ color: "#2c3e50" }}>
-            {label}
-          </Typography>
-        </Box>
-      </Card>
-    </Grid>
-  ))}
-</Grid>
+                    boxShadow: 1,
+                  }}
+                >
+  <CardActionArea
+                    onClick={() => navigate(route)}
+                    sx={{
+                      height: "100%",
+                      borderRadius: 2,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexDirection: "column",
+                      transition: "transform 0.2s, box-shadow 0.2s",
+                      '&:hover': {
+                        transform: "scale(1.05)",
+                      },
+                      '&:focus-visible': {
+                        boxShadow: "0 0 0 3px #00bfa6",
+                        transform: "scale(1.05)",
+                      },
+                    }}
+                    tabIndex={0}
+                    aria-label={`Go to ${label}`}
+                  >
+                    {React.cloneElement(icon, {
+                      sx: { fontSize: 36, mb: 1, color: "#2c3e50" },
+                    })}
+                    <Typography
+                      variant="body2"
+                      fontWeight={500}
+                      sx={{ color: "#2c3e50" }}
+                    >
+                      {label}
+                    </Typography>
+                  </CardActionArea>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
         </>
       )}
     </Box>
