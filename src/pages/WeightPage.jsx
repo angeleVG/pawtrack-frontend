@@ -18,6 +18,9 @@ import {
   CartesianGrid,
 } from "recharts";
 import axios from "axios";
+import { IconButton } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+
 
 function WeightPage() {
   const [weights, setWeights] = useState([]);
@@ -58,6 +61,17 @@ function WeightPage() {
       console.error("Error submitting weight:", err);
     }
   };
+
+  const handleDelete = async (id) => {
+  try {
+    await axios.delete(`/api/weight/${id}`, {
+      headers: { Authorization: `Bearer ${storedToken}` },
+    });
+    fetchWeights(); // Refresh de lijst
+  } catch (err) {
+    console.error("Error deleting weight:", err);
+  }
+};
 
   return (
     <Box
@@ -180,15 +194,26 @@ function WeightPage() {
               Previous weights
             </Typography>
             {weights
-              .slice()
+                .slice(0, -1) // will not show the latest weight entry
               .reverse()
               .map((entry) => (
-                <ListItem key={entry._id}>
-                  <ListItemText
-                    primary={`${entry.value} kg`}
-                    secondary={new Date(entry.date).toLocaleDateString()}
-                  />
-                </ListItem>
+              <ListItem
+  key={entry._id}
+  secondaryAction={
+    <IconButton
+      edge="end"
+      aria-label="delete"
+      onClick={() => handleDelete(entry._id)}
+    >
+      <DeleteIcon sx={{ color: "#e53935" }} />
+    </IconButton>
+  }
+>
+  <ListItemText
+    primary={`${entry.value} kg`}
+    secondary={new Date(entry.date).toLocaleDateString()}
+  />
+</ListItem>
               ))}
           </List>
         </>
