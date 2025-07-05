@@ -1,10 +1,5 @@
 function WeightForm() {
-
-
-  return (
-    <>
-    </>
-  );
+  return null; 
 }
 
 export default WeightForm;
