@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   Box,
   Typography,
@@ -29,20 +29,20 @@ function WeightPage() {
 
   const storedToken = localStorage.getItem("authToken");
 
-  const fetchWeights = async () => {
-    try {
-      const res = await axios.get("/api/weight", {
-        headers: { Authorization: `Bearer ${storedToken}` },
-      });
-      setWeights(res.data);
-    } catch (err) {
-      console.error("Error fetching weights:", err);
-    }
-  };
+const fetchWeights = useCallback(async () => {
+  try {
+    const res = await axios.get("/api/weight", {
+      headers: { Authorization: `Bearer ${storedToken}` },
+    });
+    setWeights(res.data);
+  } catch (err) {
+    console.error("Error fetching weights:", err);
+  }
+}, [storedToken]);
 
   useEffect(() => {
     fetchWeights();
-  }, []);
+  }, [fetchWeights]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

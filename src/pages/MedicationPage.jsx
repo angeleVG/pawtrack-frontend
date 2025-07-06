@@ -1,10 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   Box,
   Typography,
   Button,
   Card,
-  CardContent,
   Stack,
   Divider,
   TextField,
@@ -35,14 +34,14 @@ function MedicationPage() {
 
   const storedToken = localStorage.getItem("authToken");
 
-  const fetchMedications = () => {
-    axios
-      .get("/api/medications", {
-        headers: { Authorization: `Bearer ${storedToken}` },
-      })
-      .then((res) => setMedications(res.data))
-      .catch((err) => console.error("Failed to fetch medications:", err));
-  };
+const fetchMedications = useCallback(() => {
+  axios
+    .get("/api/medications", {
+      headers: { Authorization: `Bearer ${storedToken}` },
+    })
+    .then((res) => setMedications(res.data))
+    .catch((err) => console.error("Failed to fetch medications:", err));
+}, [storedToken]);
 
   useEffect(() => {
     fetchMedications();
