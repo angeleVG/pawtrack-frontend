@@ -12,8 +12,8 @@ function IsAnon({ children }) {
   }
 
   if (isLoggedIn) {
-    // If the user is logged in, navigate to home page ❌
-    return <Navigate to="/" />;
+    // If the user is logged in, navigate to dashboard ❌
+    return <Navigate to="/dashboard" />;
   }
 
   // If the user is not logged in, allow to see the page ✅
