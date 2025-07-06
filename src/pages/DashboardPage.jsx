@@ -21,10 +21,10 @@ function DashboardPage() {
     },
   })
     .then((res) => {
-      if (res.data.length > 0) {
-        setPet(res.data[0]); 
+    if (Array.isArray(petData) && petData.length > 0 && petData[0]) {
+        setPet(petData[0]); // set first pet
       } else {
-        setPet(null);
+        setPet(null); // if there is no pet the form will show
       }
     })
     .catch((err) => {
