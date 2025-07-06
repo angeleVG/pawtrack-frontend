@@ -90,7 +90,7 @@ const handleImageUpload = (e) => {
   {
     icon: <MedicationOutlined />,
     label: "Medications",
-    route: "/medications",
+    route: "/medication",
     bgColor: "#f0e6ff", // light purple
   },
   {

@@ -12,7 +12,7 @@ import ContactPage from "./pages/ContactPage";
 import DashboardPage from "./pages/DashboardPage";
 import MedicationPage from "./pages/MedicationPage";
 import VaccinationPage from "./pages/VaccinationPage";
-import TaskPage from "./pages/TaskPage";
+import ActivityPage from "./pages/ActivityPage";
 import PetProfilePage from "./pages/PetProfilePage";
 
 import TopNavbar from "./components/Navbar/TopNavbar";
@@ -113,10 +113,10 @@ function App() {
           }
         />
         <Route
-          path="/task"
+          path="/activity"
           element={
             <IsPrivate>
-              <TaskPage />
+              <ActivityPage />
             </IsPrivate>
           }
         />
