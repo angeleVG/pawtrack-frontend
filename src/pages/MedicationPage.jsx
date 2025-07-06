@@ -46,7 +46,7 @@ function MedicationPage() {
 
   useEffect(() => {
     fetchMedications();
-  }, []);
+  }, [fetchMedications]);
 
   const handleSubmit = (e) => {
     e.preventDefault();

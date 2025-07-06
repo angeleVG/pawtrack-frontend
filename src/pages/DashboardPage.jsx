@@ -1,9 +1,8 @@
 import { useEffect, useState, useContext } from "react";
-import { Box, Avatar, Typography, Grid, Card, CardActionArea, CardContent } from "@mui/material";
+import { Box, Avatar, Typography, Grid, Card, CardActionArea } from "@mui/material";
 import { MedicationOutlined, PetsOutlined, ContactPhoneOutlined, RestaurantOutlined, VaccinesOutlined, MonitorWeightOutlined } from "@mui/icons-material";
 import { AuthContext } from "../context/auth.context";
 import { useNavigate } from "react-router-dom";
-import authService from "../services/auth.service";
 import axios from "axios";
 import PetForm from "../components/PetForm";
 import React from "react";
