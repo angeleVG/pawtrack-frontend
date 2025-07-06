@@ -1,18 +1,15 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import { Box, Avatar, Typography, Grid, Card, CardActionArea } from "@mui/material";
 import { MedicationOutlined, PetsOutlined, ContactPhoneOutlined, RestaurantOutlined, VaccinesOutlined, MonitorWeightOutlined } from "@mui/icons-material";
-import { AuthContext } from "../context/auth.context";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import PetForm from "../components/PetForm";
-import React from "react";
 import { Tooltip } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 
 function DashboardPage() {
   const [pet, setPet] = useState(null);
   const navigate = useNavigate();
-  const { user } = useContext(AuthContext);
 
  useEffect(() => {
    const storedToken = localStorage.getItem("authToken");
