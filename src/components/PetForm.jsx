@@ -19,10 +19,21 @@ const navigate = useNavigate();
 
   useEffect(() => {
     axios
-      .get("/api/pet/breeds")
-      .then((res) => setBreeds(res.data))
-      .catch((err) => console.error("Error fetching breeds:", err));
-  }, []);
+     .get("/api/pet/breeds")
+    .then((res) => {
+      console.log("Received breeds:", res.data); // temporary check
+      if (Array.isArray(res.data)) {
+        setBreeds(res.data);
+      } else {
+        console.error("Expected an array of breeds, but got:", res.data);
+        setBreeds([]);
+      }
+    })
+    .catch((err) => {
+      console.error("Error fetching breeds:", err);
+      setBreeds([]);
+    });
+}, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -96,9 +107,10 @@ const navigate = useNavigate();
             label="Breed"
           required
         >
-          {breeds.map((breed) => (
-            <MenuItem key={breed} value={breed}>
-              {breed}
+           {Array.isArray(breeds) &&
+      breeds.map((breed) => (
+        <MenuItem key={breed} value={breed}>
+          {breed}
             </MenuItem>
           ))}
         </Select>

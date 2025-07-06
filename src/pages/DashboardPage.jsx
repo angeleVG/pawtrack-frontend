@@ -13,7 +13,7 @@ function DashboardPage() {
   const navigate = useNavigate();
 
  useEffect(() => {
-   const storedToken = localStorage.getItem("authToken");
+  const storedToken = localStorage.getItem("authToken");
 
   axios.get("/api/pet", {
     headers: {
@@ -21,10 +21,12 @@ function DashboardPage() {
     },
   })
     .then((res) => {
-    if (Array.isArray(petData) && petData.length > 0 && petData[0]) {
-        setPet(petData[0]); // set first pet
+      const petData = res.data;
+
+      if (Array.isArray(petData) && petData.length > 0 && petData[0]) {
+        setPet(petData[0]); // set the first pet
       } else {
-        setPet(null); // if there is no pet the form will show
+        setPet(null); // no pet = show form
       }
     })
     .catch((err) => {
