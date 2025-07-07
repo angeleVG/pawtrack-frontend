@@ -15,7 +15,7 @@ function DashboardPage() {
  useEffect(() => {
   const storedToken = localStorage.getItem("authToken");
 
-  axios.get("/api/pet", {
+ axios.get(`${process.env.REACT_APP_API_URL}/api/pet`, {
     headers: {
       Authorization: `Bearer ${storedToken}`,
     },
@@ -25,6 +25,7 @@ function DashboardPage() {
 
       if (Array.isArray(petData) && petData.length > 0 && petData[0]) {
         setPet(petData[0]); // set the first pet
+         localStorage.setItem("activePetId", petData[0]._id); // store pet ID for use in ActivityPage
       } else {
         setPet(null); // no pet = show form
       }
@@ -45,20 +46,19 @@ const handleImageUpload = (e) => {
 
   const storedToken = localStorage.getItem("authToken");
 
-  axios
-    .post("/api/pet/upload", formData, {
-      headers: {
-        Authorization: `Bearer ${storedToken}`,
-        "Content-Type": "multipart/form-data",
-      },
-    })
-    .then((res) => {
-      const newImageUrl = res.data.imageUrl;
-      setPet((prevPet) => ({ ...prevPet, image: newImageUrl }));
-    })
-    .catch((err) => {
-      console.error("Error uploading image:", err);
-    });
+  axios.post(`${process.env.REACT_APP_API_URL}/api/pet/upload`, formData, {
+    headers: {
+      Authorization: `Bearer ${storedToken}`,
+      "Content-Type": "multipart/form-data",
+    },
+  })
+  .then((res) => {
+    const newImageUrl = res.data.imageUrl;
+    setPet((prevPet) => ({ ...prevPet, image: newImageUrl }));
+  })
+  .catch((err) => {
+    console.error("Error uploading image:", err);
+  });
 };
 
   const iconTiles = [
