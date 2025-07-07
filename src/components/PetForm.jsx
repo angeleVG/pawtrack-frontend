@@ -19,7 +19,7 @@ const navigate = useNavigate();
 
   useEffect(() => {
     axios
-     .get(`{process.env.REACT_APP_API_URL}/api/pet/breeds`)
+.get(`${process.env.REACT_APP_API_URL}/api/pet/breeds`)
     .then((res) => {
       console.log("Received breeds:", res.data); // temporary check
       if (Array.isArray(res.data)) {
