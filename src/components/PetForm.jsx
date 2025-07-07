@@ -44,9 +44,7 @@ const navigate = useNavigate();
 
  const storedToken = localStorage.getItem("authToken");
 
-    axios
-    
-      .post("/api/pet", formData, {
+    axios.post(`${process.env.REACT_APP_API_URL}/api/pet`, formData, {
     headers: {
       Authorization: `Bearer ${storedToken}`,
     },
