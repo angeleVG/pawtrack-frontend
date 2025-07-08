@@ -77,7 +77,7 @@ const handleImageUpload = (e) => {
   {
     icon: <RestaurantOutlined />,
     label: "Food",
-    route: `/pet/${pet._id}/food`,
+   route: pet ? `/pet/${pet._id}/food` : "#",
     bgColor: "#fff7e6", // light yellow
   },
   {
