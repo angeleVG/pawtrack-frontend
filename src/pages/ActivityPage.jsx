@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import {
   Box, Typography, TextField, Button, List, ListItem, ListItemText,
-  MenuItem, Stack
+  MenuItem, Stack, IconButton
 } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
 
 function ActivityPage() {
@@ -11,12 +13,13 @@ function ActivityPage() {
   const [timesPerDay, setTimesPerDay] = useState(1);
   const [duration, setDuration] = useState(15);
   const [notes, setNotes] = useState("");
-
-  const storedToken = localStorage.getItem("authToken");
+  const [editId, setEditId] = useState(null);
   const petId = localStorage.getItem("activePetId");
-  
 
-  useEffect(() => {
+
+   useEffect(() => {
+  const storedToken = localStorage.getItem("authToken");
+
     axios.get(`${process.env.REACT_APP_API_URL}/api/task`, {
       headers: { Authorization: `Bearer ${storedToken}` },
     })
@@ -24,10 +27,18 @@ function ActivityPage() {
       .catch(err => console.error("Error loading tasks", err));
   }, []);
 
+  const resetForm = () => {
+    setType("walk");
+    setTimesPerDay(1);
+    setDuration(15);
+    setNotes("");
+    setEditId(null);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    const newTask = {
-      dog: petId, 
+    const taskData = {
+      dog: petId,
       type,
       timesPerDay,
       duration,
@@ -37,23 +48,49 @@ function ActivityPage() {
       }
     };
 
-console.log("petId:", petId);
-console.log("newTask:", newTask);
-console.log("Pet ID uit localStorage:", petId);
+    const request = editId
+      ? axios.put(`${process.env.REACT_APP_API_URL}/api/task/${editId}`, taskData, {
+          headers: { Authorization: `Bearer ${storedToken}` }
+        })
+      : axios.post(`${process.env.REACT_APP_API_URL}/api/task`, taskData, {
+          headers: { Authorization: `Bearer ${storedToken}` }
+        });
 
-    axios.post(`${process.env.REACT_APP_API_URL}/api/task`, newTask, {
-      headers: { Authorization: `Bearer ${storedToken}` },
-    })
+    request
       .then(res => {
-        setActivities([...activities, res.data]);
-        setNotes("");
+        if (editId) {
+          setActivities((prev) =>
+            prev.map((task) => (task._id === editId ? res.data : task))
+          );
+        } else {
+          setActivities([...activities, res.data]);
+        }
+        resetForm();
       })
-      .catch(err => console.error("Error creating task", err));
+      .catch(err => console.error("Error saving task", err));
+  };
+
+  const handleEdit = (task) => {
+    setType(task.type);
+    setTimesPerDay(task.timesPerDay);
+    setDuration(task.duration);
+    setNotes(task.dailyWalks?.notes || "");
+    setEditId(task._id);
+  };
+
+  const handleDelete = (id) => {
+    axios.delete(`${process.env.REACT_APP_API_URL}/api/task/${id}`, {
+      headers: { Authorization: `Bearer ${storedToken}` }
+    })
+      .then(() => setActivities((prev) => prev.filter((task) => task._id !== id)))
+      .catch(err => console.error("Error deleting task", err));
   };
 
   return (
     <Box p={2}>
-      <Typography variant="h5" mb={2}>Activity Tracker</Typography>
+      <Typography variant="h5" mb={2}>
+        {editId ? "Edit Activity" : "Add Activity"}
+      </Typography>
 
       <form onSubmit={handleSubmit}>
         <Stack spacing={2} mb={2}>
@@ -91,16 +128,33 @@ console.log("Pet ID uit localStorage:", petId);
           />
 
           <Button type="submit" variant="contained" color="primary">
-            Add Activity
+            {editId ? "Update Activity" : "Add Activity"}
           </Button>
+          {editId && (
+            <Button variant="outlined" color="secondary" onClick={resetForm}>
+              Cancel
+            </Button>
+          )}
         </Stack>
       </form>
 
       <List>
         {activities.map((task) => (
-          <ListItem key={task._id}>
+          <ListItem
+            key={task._id}
+            secondaryAction={
+              <>
+                <IconButton edge="end" onClick={() => handleEdit(task)}>
+                  <EditIcon />
+                </IconButton>
+                <IconButton edge="end" onClick={() => handleDelete(task._id)}>
+                  <DeleteIcon />
+                </IconButton>
+              </>
+            }
+          >
             <ListItemText
-              primary={`${task.type} (${task.duration} min x ${task.timesPerDay})`}
+              primary={`${task.type} (${task.duration} minutes x ${task.timesPerDay}) a day`}
               secondary={task.dailyWalks?.notes}
             />
           </ListItem>
