@@ -31,45 +31,46 @@ function WeightPage() {
 
 const fetchWeights = useCallback(async () => {
   try {
-    const res = await axios.get("/api/weight", {
+    const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/weight`, {
       headers: { Authorization: `Bearer ${storedToken}` },
     });
     setWeights(res.data);
   } catch (err) {
-    console.error("Error fetching weights:", err);
+    console.error("Error fetching weights:", err.response || err.message);
   }
 }, [storedToken]);
+
 
   useEffect(() => {
     fetchWeights();
   }, [fetchWeights]);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      await axios.post(
-        "/api/weight",
-        { value: newWeight },
-        {
-          headers: { Authorization: `Bearer ${storedToken}` },
-        }
-      );
-      setNewWeight("");
-      setShowForm(false);
-      fetchWeights();
-    } catch (err) {
-      console.error("Error submitting weight:", err);
-    }
-  };
-
-  const handleDelete = async (id) => {
+  e.preventDefault();
   try {
-    await axios.delete(`/api/weight/${id}`, {
+    await axios.post(
+      `${process.env.REACT_APP_API_URL}/api/weight`,
+      { value: newWeight },
+      {
+        headers: { Authorization: `Bearer ${storedToken}` },
+      }
+    );
+    setNewWeight("");
+    setShowForm(false);
+    fetchWeights();
+  } catch (err) {
+    console.error("Error submitting weight:", err.response || err.message);
+  }
+};
+
+ const handleDelete = async (id) => {
+  try {
+    await axios.delete(`${process.env.REACT_APP_API_URL}/api/weight/${id}`, {
       headers: { Authorization: `Bearer ${storedToken}` },
     });
-    fetchWeights(); // Refresh list 
+    fetchWeights();
   } catch (err) {
-    console.error("Error deleting weight:", err);
+    console.error("Error deleting weight:", err.response || err.message);
   }
 };
 
