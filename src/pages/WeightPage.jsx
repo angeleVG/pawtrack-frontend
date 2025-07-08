@@ -6,7 +6,8 @@ import {
   Button,
   List,
   ListItem,
-  ListItemText,
+  ListItemText, 
+  IconButton
 } from "@mui/material";
 import {
   ResponsiveContainer,
@@ -18,7 +19,6 @@ import {
   CartesianGrid,
 } from "recharts";
 import axios from "axios";
-import { IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 
@@ -31,46 +31,45 @@ function WeightPage() {
 
 const fetchWeights = useCallback(async () => {
   try {
-    const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/weight`, {
+    const res = await axios.get("/api/weight", {
       headers: { Authorization: `Bearer ${storedToken}` },
     });
     setWeights(res.data);
   } catch (err) {
-    console.error("Error fetching weights:", err.response || err.message);
+    console.error("Error fetching weights:", err);
   }
 }, [storedToken]);
-
 
   useEffect(() => {
     fetchWeights();
   }, [fetchWeights]);
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  try {
-    await axios.post(
-      `${process.env.REACT_APP_API_URL}/api/weight`,
-      { value: newWeight },
-      {
-        headers: { Authorization: `Bearer ${storedToken}` },
-      }
-    );
-    setNewWeight("");
-    setShowForm(false);
-    fetchWeights();
-  } catch (err) {
-    console.error("Error submitting weight:", err.response || err.message);
-  }
-};
+    e.preventDefault();
+    try {
+      await axios.post(
+        "/api/weight",
+        { value: newWeight },
+        {
+          headers: { Authorization: `Bearer ${storedToken}` },
+        }
+      );
+      setNewWeight("");
+      setShowForm(false);
+      fetchWeights();
+    } catch (err) {
+      console.error("Error submitting weight:", err);
+    }
+  };
 
- const handleDelete = async (id) => {
+  const handleDelete = async (id) => {
   try {
-    await axios.delete(`${process.env.REACT_APP_API_URL}/api/weight/${id}`, {
+    await axios.delete(`/api/weight/${id}`, {
       headers: { Authorization: `Bearer ${storedToken}` },
     });
-    fetchWeights();
+    fetchWeights(); // Refresh list 
   } catch (err) {
-    console.error("Error deleting weight:", err.response || err.message);
+    console.error("Error deleting weight:", err);
   }
 };
 
