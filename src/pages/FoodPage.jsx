@@ -41,7 +41,7 @@ function FoodPage({ petId }) {
 
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/api/pet/${petId}`, {
+      .get(`${process.env.REACT_APP_API_URL}/api/pet/${petId}/food`, {
         headers: { Authorization: `Bearer ${storedToken}` },
       })
       .then((res) => {
@@ -62,22 +62,37 @@ function FoodPage({ petId }) {
     setFood((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = async () => {
-    try {
-      const updatedFood = { ...food };
-      if (!showWater) updatedFood.waterAmount = "";
-      if (!showSnacks) updatedFood.snacksPerDay = "";
+const handleSubmit = async () => {
+  try {
+    const updatedFood = { ...food };
+    if (!showWater) updatedFood.waterAmount = "";
+    if (!showSnacks) updatedFood.snacksPerDay = "";
 
+    // ✅ Update food info via juiste endpoint
+    await axios.put(
+      `${process.env.REACT_APP_API_URL}/api/pet/${petId}/food`,
+      updatedFood,
+      {
+        headers: { Authorization: `Bearer ${storedToken}` }
+      }
+    );
+
+    // update allergies
+    if (allergiesEnabled) {
       await axios.put(
         `${process.env.REACT_APP_API_URL}/api/pet/${petId}`,
-        { food: updatedFood, allergies: allergiesEnabled ? allergies : [] },
-        { headers: { Authorization: `Bearer ${storedToken}` } }
+        { allergies },
+        {
+          headers: { Authorization: `Bearer ${storedToken}` }
+        }
       );
-      alert("Food info saved!");
-    } catch (error) {
-      console.error("Failed to save food:", error);
     }
-  };
+
+    alert("Food info saved!");
+  } catch (error) {
+    console.error("Failed to save food:", error);
+  }
+};
 
   const handleAddAllergy = () => {
     if (allergyInput && !allergies.includes(allergyInput)) {
@@ -249,7 +264,7 @@ function FoodPage({ petId }) {
             multiline
             rows={2}
           />
-          
+
           <Button
             onClick={handleSubmit}
             variant="contained"
