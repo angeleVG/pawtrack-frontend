@@ -18,7 +18,6 @@ function FoodPage({ petId }) {
     background: "#f7fdfc",
     teal: "#00bfa6",
     tealHover: "#00a896",
-    salmon: "#FA8072",
   };
 
   const [food, setFood] = useState({
@@ -29,70 +28,91 @@ function FoodPage({ petId }) {
     waterAmount: "",
     snacksPerDay: "",
     notes: "",
-
   });
+  const [foodId, setFoodId] = useState(null);
+  const [allergies, setAllergies] = useState([]);
+  const [allergyInput, setAllergyInput] = useState("");
   const [allergiesEnabled, setAllergiesEnabled] = useState(false);
   const [showWater, setShowWater] = useState(false);
   const [showSnacks, setShowSnacks] = useState(false);
-  const [allergyInput, setAllergyInput] = useState("");
-  const [allergies, setAllergies] = useState([]);
 
   const storedToken = localStorage.getItem("authToken");
 
-  useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_API_URL}/api/pet/${petId}/food`, {
-        headers: { Authorization: `Bearer ${storedToken}` },
-      })
-      .then((res) => {
-        if (res.data.food) {
-          setFood((prev) => ({ ...prev, ...res.data.food }));
-          if (res.data.food.waterAmount) setShowWater(true);
-          if (res.data.food.snacksPerDay) setShowSnacks(true);
-        }
-        if (res.data.allergies?.length) {
-          setAllergies(res.data.allergies);
-          setAllergiesEnabled(true);
-        }
-      })
-      .catch((err) => console.error("Error loading food info", err));
-  }, [petId]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const foodRes = await axios.get(
+        `${process.env.REACT_APP_API_URL}/api/food/${petId}`,
+        { headers: { Authorization: `Bearer ${storedToken}` } }
+      );
+
+      if (foodRes.data) {
+        setFood(foodRes.data);
+        setFoodId(foodRes.data._id);
+        if (foodRes.data.waterAmount) setShowWater(true);
+        if (foodRes.data.snacksPerDay) setShowSnacks(true);
+      }
+    } catch (err) {
+      console.error("Error loading food info:", err);
+    }
+
+    try {
+      const petRes = await axios.get(
+        `${process.env.REACT_APP_API_URL}/api/pet/${petId}`,
+        { headers: { Authorization: `Bearer ${storedToken}` } }
+      );
+
+      if (petRes.data.allergies?.length) {
+        setAllergies(petRes.data.allergies);
+        setAllergiesEnabled(true);
+      }
+    } catch (err) {
+      console.error("Error loading allergies:", err);
+    }
+  };
+
+  if (petId && storedToken) fetchData();
+}, [petId]);
 
   const handleChange = (e) => {
     setFood((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-const handleSubmit = async () => {
-  try {
-    const updatedFood = { ...food };
-    if (!showWater) updatedFood.waterAmount = "";
-    if (!showSnacks) updatedFood.snacksPerDay = "";
+  const handleSubmit = async () => {
+    try {
+      const updatedFood = { ...food };
+      if (!showWater) updatedFood.waterAmount = "";
+      if (!showSnacks) updatedFood.snacksPerDay = "";
 
-    // ✅ Update food info via juiste endpoint
-    await axios.put(
-      `${process.env.REACT_APP_API_URL}/api/pet/${petId}/food`,
-      updatedFood,
-      {
-        headers: { Authorization: `Bearer ${storedToken}` }
+      if (foodId) {
+        await axios.put(
+          `${process.env.REACT_APP_API_URL}/api/food/${foodId}`,
+          updatedFood,
+          { headers: { Authorization: `Bearer ${storedToken}` } }
+        );
+      } else {
+        const res = await axios.post(
+          `${process.env.REACT_APP_API_URL}/api/food`,
+          { ...updatedFood, pet: petId },
+          { headers: { Authorization: `Bearer ${storedToken}` } }
+        );
+        setFoodId(res.data._id);
       }
-    );
 
-    // update allergies
-    if (allergiesEnabled) {
-      await axios.put(
-        `${process.env.REACT_APP_API_URL}/api/pet/${petId}`,
-        { allergies },
-        {
-          headers: { Authorization: `Bearer ${storedToken}` }
-        }
-      );
+      if (allergiesEnabled) {
+        await axios.put(
+          `${process.env.REACT_APP_API_URL}/api/pet/${petId}`,
+          { allergies },
+          { headers: { Authorization: `Bearer ${storedToken}` } }
+        );
+      }
+
+      alert("Food info saved!");
+    } catch (err) {
+      console.error("Failed to save food:", err);
     }
-
-    alert("Food info saved!");
-  } catch (error) {
-    console.error("Failed to save food:", error);
-  }
-};
+  };
 
   const handleAddAllergy = () => {
     if (allergyInput && !allergies.includes(allergyInput)) {
@@ -112,20 +132,8 @@ const handleSubmit = async () => {
 
       <Paper elevation={3} sx={{ p: 2, borderRadius: 2 }}>
         <Stack spacing={2}>
-          <TextField
-            label="Brand"
-            name="brand"
-            value={food.brand}
-            onChange={handleChange}
-            fullWidth
-          />
-          <TextField
-            label="Product"
-            name="product"
-            value={food.product}
-            onChange={handleChange}
-            fullWidth
-          />
+          <TextField label="Brand" name="brand" value={food.brand} onChange={handleChange} fullWidth />
+          <TextField label="Product" name="product" value={food.product} onChange={handleChange} fullWidth />
           <TextField
             label="Portion size per meal"
             name="portionSize"
@@ -133,12 +141,10 @@ const handleSubmit = async () => {
             onChange={handleChange}
             fullWidth
             type="number"
-            InputProps={{
-              endAdornment: <InputAdornment position="end">g</InputAdornment>,
-            }}
+            InputProps={{ endAdornment: <InputAdornment position="end">g</InputAdornment> }}
           />
           <TextField
-            label="Number of meals per day"
+            label="Meals per day"
             name="frequency"
             value={food.frequency}
             onChange={handleChange}
@@ -146,24 +152,20 @@ const handleSubmit = async () => {
             type="number"
           />
 
+          {/* Allergies */}
           <FormControlLabel
             control={
               <Switch
                 checked={allergiesEnabled}
                 onChange={(e) => setAllergiesEnabled(e.target.checked)}
                 sx={{
-                  "& .MuiSwitch-switchBase.Mui-checked": {
-                    color: COLORS.teal,
-                  },
-                  "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
-                    backgroundColor: COLORS.teal,
-                  },
+                  "& .MuiSwitch-switchBase.Mui-checked": { color: COLORS.teal },
+                  "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": { backgroundColor: COLORS.teal },
                 }}
               />
             }
             label="Track allergies?"
           />
-
           {allergiesEnabled && (
             <>
               <Stack direction="row" spacing={1}>
@@ -188,62 +190,52 @@ const handleSubmit = async () => {
                     key={a}
                     label={a}
                     onDelete={() => handleRemoveAllergy(a)}
-                    sx={{ backgroundColor: COLORS.teal, color: "#fff", fontWeight: 500 }}
+                    sx={{ backgroundColor: COLORS.teal, color: "#fff" }}
                   />
                 ))}
               </Stack>
             </>
           )}
 
-          {/* Water toggle */}
+          {/* Water */}
           <FormControlLabel
             control={
               <Switch
                 checked={showWater}
                 onChange={(e) => setShowWater(e.target.checked)}
                 sx={{
-                  "& .MuiSwitch-switchBase.Mui-checked": {
-                    color: COLORS.teal,
-                  },
-                  "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
-                    backgroundColor: COLORS.teal,
-                  },
+                  "& .MuiSwitch-switchBase.Mui-checked": { color: COLORS.teal },
+                  "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": { backgroundColor: COLORS.teal },
                 }}
               />
             }
-            label="Track daily water intake?"
+            label="Track daily water?"
           />
           {showWater && (
             <TextField
-              label="Water intake per day"
+              label="Water per day"
               name="waterAmount"
               value={food.waterAmount}
               onChange={handleChange}
               fullWidth
               type="number"
-              InputProps={{
-                endAdornment: <InputAdornment position="end">ml</InputAdornment>,
-              }}
+              InputProps={{ endAdornment: <InputAdornment position="end">ml</InputAdornment> }}
             />
           )}
 
-          {/* Snacks toggle */}
+          {/* Snacks */}
           <FormControlLabel
             control={
               <Switch
                 checked={showSnacks}
                 onChange={(e) => setShowSnacks(e.target.checked)}
                 sx={{
-                  "& .MuiSwitch-switchBase.Mui-checked": {
-                    color: COLORS.teal,
-                  },
-                  "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
-                    backgroundColor: COLORS.teal,
-                  },
+                  "& .MuiSwitch-switchBase.Mui-checked": { color: COLORS.teal },
+                  "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": { backgroundColor: COLORS.teal },
                 }}
               />
             }
-            label="Track snacks per day?"
+            label="Track snacks?"
           />
           {showSnacks && (
             <TextField
@@ -255,7 +247,8 @@ const handleSubmit = async () => {
               type="number"
             />
           )}
-  <TextField
+
+          <TextField
             label="Notes"
             name="notes"
             value={food.notes}
