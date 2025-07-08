@@ -67,7 +67,7 @@ const fetchWeights = useCallback(async () => {
     await axios.delete(`/api/weight/${id}`, {
       headers: { Authorization: `Bearer ${storedToken}` },
     });
-    fetchWeights(); // Refresh de lijst
+    fetchWeights(); // Refresh list 
   } catch (err) {
     console.error("Error deleting weight:", err);
   }
@@ -181,41 +181,47 @@ const fetchWeights = useCallback(async () => {
             </Typography>
           </Box>
 
-          <List dense>
-            <Typography
-              variant="subtitle1"
-              sx={{
-                fontWeight: "bold",
-                color: "#00bfa6",
-                mt: 2,
-                mb: 1,
-              }}
-            >
-              Previous weights
-            </Typography>
-            {weights
-                .slice(0, -1) // will not show the latest weight entry
-              .reverse()
-              .map((entry) => (
-              <ListItem
-  key={entry._id}
-  secondaryAction={
-    <IconButton
-      edge="end"
-      aria-label="delete"
-      onClick={() => handleDelete(entry._id)}
+{Array.isArray(weights) && weights.length > 1 && (
+  <>
+    <Typography
+      variant="subtitle1"
+      sx={{
+        fontWeight: "bold",
+        color: "#00bfa6",
+        mt: 2,
+        mb: 1,
+      }}
     >
-      <DeleteIcon sx={{ color: "#e53935" }} />
-    </IconButton>
-  }
->
-  <ListItemText
-    primary={`${entry.value} kg`}
-    secondary={new Date(entry.date).toLocaleDateString()}
-  />
-</ListItem>
-              ))}
-          </List>
+      Previous weights
+    </Typography>
+
+    <List dense>
+      {weights
+        .slice(0, -1)
+        .reverse()
+        .map((entry) => (
+          <ListItem
+            key={entry._id}
+            secondaryAction={
+              <IconButton
+                edge="end"
+                aria-label="delete"
+                onClick={() => handleDelete(entry._id)}
+              >
+                <DeleteIcon sx={{ color: "#e53935" }} />
+              </IconButton>
+            }
+          >
+            <ListItemText
+              primary={`${entry.value} kg`}
+              secondary={new Date(entry.date).toLocaleDateString()}
+            />
+          </ListItem>
+        ))}
+    </List>
+  </>
+)}
+
         </>
       )}
     </Box>
