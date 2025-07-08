@@ -37,6 +37,7 @@ function ActivityPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+      const storedToken = localStorage.getItem("authToken");
     const taskData = {
       dog: petId,
       type,
@@ -79,6 +80,7 @@ function ActivityPage() {
   };
 
   const handleDelete = (id) => {
+     const storedToken = localStorage.getItem("authToken");
     axios.delete(`${process.env.REACT_APP_API_URL}/api/task/${id}`, {
       headers: { Authorization: `Bearer ${storedToken}` }
     })
