@@ -17,6 +17,7 @@ function ActivityPage() {
   const petId = localStorage.getItem("activePetId");
 
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
    useEffect(() => {
   const storedToken = localStorage.getItem("authToken");
 
