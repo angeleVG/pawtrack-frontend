@@ -36,11 +36,11 @@ function MedicationPage() {
 
 const fetchMedications = useCallback(() => {
   axios
-    .get("/api/medications", {
+    .get(`${process.env.REACT_APP_API_URL}/api/medications`, {
       headers: { Authorization: `Bearer ${storedToken}` },
     })
     .then((res) => setMedications(res.data))
-    .catch((err) => console.error("Failed to fetch medications:", err));
+    .catch((err) => console.error("Failed to fetch medications:", err.response || err.message));
 }, [storedToken]);
 
   useEffect(() => {
@@ -48,24 +48,25 @@ const fetchMedications = useCallback(() => {
   }, [fetchMedications]);
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    const newMed = { name, purpose, dosage, startDate, endDate };
+  e.preventDefault();
+  const newMed = { name, purpose, dosage, startDate, endDate };
 
-    const request = editId
-      ? axios.put(`/api/medications/${editId}`, newMed, {
-          headers: { Authorization: `Bearer ${storedToken}` },
-        })
-      : axios.post("/api/medications", newMed, {
-          headers: { Authorization: `Bearer ${storedToken}` },
-        });
-
-    request
-      .then(() => {
-        fetchMedications();
-        resetForm();
+  const request = editId
+    ? axios.put(`${process.env.REACT_APP_API_URL}/api/medications/${editId}`, newMed, {
+        headers: { Authorization: `Bearer ${storedToken}` },
       })
-      .catch((err) => console.error("Failed to save medication:", err));
-  };
+    : axios.post(`${process.env.REACT_APP_API_URL}/api/medications`, newMed, {
+        headers: { Authorization: `Bearer ${storedToken}` },
+      });
+
+  request
+    .then(() => {
+      fetchMedications();
+      resetForm();
+    })
+    .catch((err) => console.error("Failed to save medication:", err.response || err.message));
+};
+
 
   const handleEdit = (med) => {
     setName(med.name);
@@ -77,14 +78,14 @@ const fetchMedications = useCallback(() => {
     setShowForm(true);
   };
 
-  const handleDelete = (id) => {
-    axios
-      .delete(`/api/medications/${id}`, {
-        headers: { Authorization: `Bearer ${storedToken}` },
-      })
-      .then(() => fetchMedications())
-      .catch((err) => console.error("Failed to delete medication:", err));
-  };
+ const handleDelete = (id) => {
+  axios
+    .delete(`${process.env.REACT_APP_API_URL}/api/medications/${id}`, {
+      headers: { Authorization: `Bearer ${storedToken}` },
+    })
+    .then(() => fetchMedications())
+    .catch((err) => console.error("Failed to delete medication:", err.response || err.message));
+};
 
   const resetForm = () => {
     setName("");
