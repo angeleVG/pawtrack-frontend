@@ -144,7 +144,7 @@ function ActivityPage() {
           />
 
           <TextField
-            label="Duration (min)"
+            label="How long in minutes"
             type="number"
             value={duration}
             onChange={(e) => setDuration(e.target.value)}
