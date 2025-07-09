@@ -1,174 +1,88 @@
-import React, { useState } from "react";
 import {
-  BottomNavigation,
-  BottomNavigationAction,
-  Paper,
   Drawer,
   List,
-  ListItem,
+  ListItemButton,
   ListItemIcon,
   ListItemText,
+  Divider,
   Box,
+  Typography,
 } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
-import MenuIcon from "@mui/icons-material/Menu";
 import MonitorWeightIcon from "@mui/icons-material/MonitorWeight";
 import RestaurantIcon from "@mui/icons-material/Restaurant";
 import MedicationIcon from "@mui/icons-material/Medication";
-import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
 import VaccinesIcon from "@mui/icons-material/Vaccines";
 import ContactsIcon from "@mui/icons-material/Contacts";
-import { useNavigate, useLocation } from "react-router-dom";
+import PersonIcon from "@mui/icons-material/Person";
 
-// Mint and salmon PawTrack palette
-const COLORS = {
-  background: "#f7fdfc",
-  primary: "#00bfa6",
-  accent: "#FA8072",
-  divider: "#e0e0e0",
-};
-
-export default function BottomNavbar() {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const [drawerOpen, setDrawerOpen] = useState(false);
-
-  // Only the Home icon is in the bottom nav, Menu opens drawer
-  const navItems = [
-    { label: "Home", icon: <HomeIcon />, path: "/dashboard" },
-    { label: "Menu", icon: <MenuIcon />, isDrawer: true },
-  ];
-
-  // All other pages in the drawer
-  const drawerPages = [
+export default function AppDrawer({ open, onClose, onNavigate }) {
+  const menu = [
+    { label: "Dashboard", icon: <HomeIcon />, path: "/dashboard" },
     { label: "Weight", icon: <MonitorWeightIcon />, path: "/weight" },
     { label: "Food", icon: <RestaurantIcon />, path: "/food" },
     { label: "Medication", icon: <MedicationIcon />, path: "/medication" },
-    { label: "Activity", icon: <DirectionsRunIcon />, path: "/activity" },
     { label: "Vaccination", icon: <VaccinesIcon />, path: "/vaccination" },
     { label: "Contacts", icon: <ContactsIcon />, path: "/contacts" },
+    { label: "Profile", icon: <PersonIcon />, path: "/profile" },
   ];
 
-  // Highlight Home if on dashboard
-  const currentTab = navItems.findIndex(
-    (item) =>
-      !item.isDrawer && location.pathname.startsWith(item.path)
-  );
-
   return (
-    <>
-      {/* Bottom Navigation */}
-      <Paper
-        sx={{
-          position: "fixed",
-          bottom: 0,
-          left: 0,
-          right: 0,
-          zIndex: 1200,
-          borderRadius: 0,
-          bgcolor: "#fff",
-          borderTop: `1px solid ${COLORS.divider}`,
-          maxWidth: 600,
-          margin: "0 auto",
-        }}
-        elevation={3}
-      >
-        <BottomNavigation
-          showLabels
-          value={currentTab !== -1 ? currentTab : 0}
-          onChange={(_, newValue) => {
-            const item = navItems[newValue];
-            if (item.isDrawer) {
-              setDrawerOpen(true);
-            } else {
-              navigate(item.path);
-            }
-          }}
+    <Drawer
+      anchor="left"
+      open={open}
+      onClose={onClose}
+      PaperProps={{
+        sx: {
+          width: { xs: "75vw", sm: 240 }, // <= Past zich aan per scherm! xs = mobiel
+          bgcolor: "#f7fdfc",
+          boxSizing: "border-box",
+        },
+      }}
+    >
+      <Box sx={{ pt: 2, pb: 1, px: 3 }}>
+        <Typography
+          variant="h5"
+          fontWeight={700}
+          color="#00bfa6"
           sx={{
-            height: 60,
-            bgcolor: "#fff",
-            display: "flex",
-            justifyContent: "space-between",
+            fontSize: { xs: "1.3rem", sm: "1.18rem" },
           }}
         >
-          {navItems.map((item) => (
-            <BottomNavigationAction
-              key={item.label}
-              label={item.label}
-              icon={item.icon}
-              sx={{
-                color: COLORS.primary,
-                "&.Mui-selected": { color: COLORS.accent },
-                fontSize: 14,
-              }}
-            />
-          ))}
-        </BottomNavigation>
-      </Paper>
-      {/* Drawer */}
-      <Drawer
-        anchor="right"
-        open={drawerOpen}
-        onClose={() => setDrawerOpen(false)}
-        PaperProps={{
-          sx: {
-            width: 270,
-            bgcolor: COLORS.background,
-            pt: 2,
-            boxSizing: "border-box",
-            maxWidth: "90vw",
-          },
-        }}
-      >
-        <Box sx={{ px: 2, mb: 2 }}>
-          <Box
+          🐾 PawTrack
+        </Typography>
+      </Box>
+      <Divider />
+      <List sx={{ pt: 0 }}>
+        {menu.map((item) => (
+          <ListItemButton
+            key={item.label}
+            onClick={() => onNavigate(item.path)}
             sx={{
-              fontWeight: 600,
-              fontSize: 18,
-              mb: 1,
-              color: COLORS.primary,
+              minHeight: 52,
+              borderRadius: 2,
+              mb: 0.5,
+              px: 2,
             }}
           >
-            Menu
-          </Box>
-        </Box>
-        <List>
-          {drawerPages.map((item) => (
-            <ListItem
-              button
-              key={item.label}
-              onClick={() => {
-                navigate(item.path);
-                setDrawerOpen(false);
-              }}
-              sx={{
-                borderRadius: 2,
-                mx: 1,
-                mb: 0.5,
-                "&:active, &:hover": {
-                  bgcolor: COLORS.accent + "20", // slight salmon tint
+            <ListItemIcon sx={{ minWidth: 36 }}>{item.icon}</ListItemIcon>
+            <ListItemText
+              primary={item.label}
+              primaryTypographyProps={{
+                sx: {
+                  fontSize: { xs: "1.15rem", sm: "1.09rem" },
+                  fontWeight: 500,
+                  color: "#212121",
+                  lineHeight: 1.2,
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
                 },
               }}
-            >
-              <ListItemIcon
-                sx={{
-                  color: COLORS.primary,
-                  minWidth: 36,
-                }}
-              >
-                {item.icon}
-              </ListItemIcon>
-              <ListItemText
-                primary={item.label}
-                primaryTypographyProps={{
-                  fontSize: 16,
-                  color: "#2E3A59",
-                }}
-              />
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
-    </>
+            />
+          </ListItemButton>
+        ))}
+      </List>
+    </Drawer>
   );
 }
