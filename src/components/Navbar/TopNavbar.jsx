@@ -35,7 +35,7 @@ function TopNavbar() {
       }}
     >
       <Toolbar sx={{ minHeight: 56, justifyContent: "space-between", p: 0 }}>
-        {/* Logo links */}
+        {/* Logo left */}
         <Box display="flex" alignItems="center">
           <IconButton component={Link} to={logoTarget} sx={{ color: COLORS.teal }}>
             <PetsIcon sx={{ fontSize: 32 }} />
@@ -57,7 +57,7 @@ function TopNavbar() {
           </Typography>
         </Box>
 
-        {/* Profielicoon (en naam, en menu) rechts */}
+        {/* profile icon right */}
         <Box display="flex" alignItems="center">
           <IconButton onClick={handleMenuOpen} color="inherit">
             {isLoggedIn && user?.image ? (
