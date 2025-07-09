@@ -12,6 +12,7 @@ const COLORS = {
   background: "#f7fdfc",
   teal: "#00bfa6",
   salmon: "#FA8072",
+  black: "#000"
 };
 
 function TopNavbar() {
