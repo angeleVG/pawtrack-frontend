@@ -1,5 +1,5 @@
 // src/components/layout/TopNavbar.jsx
-import { AppBar, Toolbar, Typography, IconButton, Box, Button, Avatar, Menu, MenuItem } from "@mui/material";
+import { AppBar, Toolbar, Typography, IconButton, Box, Avatar, Menu, MenuItem } from "@mui/material";
 import PetsIcon from "@mui/icons-material/Pets";
 import HomeIcon from "@mui/icons-material/Home";
 import LoginIcon from "@mui/icons-material/Login";
