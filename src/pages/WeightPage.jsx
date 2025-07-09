@@ -34,11 +34,14 @@ const fetchWeights = useCallback(async () => {
     const res = await axios.get("/api/weight", {
       headers: { Authorization: `Bearer ${storedToken}` },
     });
-    setWeights(res.data);
+    // always set to an array
+    setWeights(Array.isArray(res.data) ? res.data : []);
   } catch (err) {
     console.error("Error fetching weights:", err);
+    setWeights([]); // fallback to empty array on error
   }
 }, [storedToken]);
+
 
   useEffect(() => {
     fetchWeights();
