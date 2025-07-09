@@ -1,10 +1,18 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
+import { AuthContext } from "../context/auth.context";
 import { Box, Typography, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 
 const HomePage = () => {
+  const { isLoggedIn } = useContext(AuthContext);
   const navigate = useNavigate();
+
+ useEffect(() => {
+    if (isLoggedIn) {
+      navigate("/dashboard");
+    }
+  }, [isLoggedIn, navigate]);
 
     return (
     <Box
