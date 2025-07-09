@@ -42,15 +42,15 @@ function VaccinationPage() {
 
   const storedToken = localStorage.getItem("authToken");
 
-  useEffect(() => {
-    if (!petId) return;
-    axios
-      .get(`${process.env.REACT_APP_API_URL}/api/vaccination/${petId}`, {
-        headers: { Authorization: `Bearer ${storedToken}` }
-      })
-      .then(res => setVaccinations(res.data))
-      .catch(() => setVaccinations([]));
-  }, [petId, storedToken]);
+ useEffect(() => {
+  if (!petId) return;
+  axios
+    .get(`${process.env.REACT_APP_API_URL}/api/vaccination/pet/${petId}`, {
+      headers: { Authorization: `Bearer ${storedToken}` }
+    })
+    .then(res => setVaccinations(res.data))
+    .catch(() => setVaccinations([]));
+}, [petId, storedToken]);
 
   const resetForm = () => {
     setForm({
@@ -64,34 +64,35 @@ function VaccinationPage() {
     setEditId(null);
   };
 
-  const handleSubmit = async e => {
-    e.preventDefault();
-    try {
-      if (editId) {
-        await axios.put(
-          `${process.env.REACT_APP_API_URL}/api/vaccination/${editId}`,
-          { ...form, pet: petId },
-          { headers: { Authorization: `Bearer ${storedToken}` } }
-        );
-      } else {
-        await axios.post(
-          `${process.env.REACT_APP_API_URL}/api/vaccination`,
-          { ...form, pet: petId },
-          { headers: { Authorization: `Bearer ${storedToken}` } }
-        );
-      }
-      // reload list, close form
-      const res = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/vaccination/${petId}`,
+const handleSubmit = async e => {
+  e.preventDefault();
+  try {
+    if (editId) {
+      await axios.put(
+        `${process.env.REACT_APP_API_URL}/api/vaccination/${editId}`,
+        { ...form, pet: petId },
         { headers: { Authorization: `Bearer ${storedToken}` } }
       );
-      setVaccinations(res.data);
-      setShowForm(false);
-      resetForm();
-    } catch (err) {
-      alert("Failed to save");
+    } else {
+      await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/vaccination`,
+        { ...form, pet: petId },
+        { headers: { Authorization: `Bearer ${storedToken}` } }
+      );
     }
-  };
+    const res = await axios.get(
+      `${process.env.REACT_APP_API_URL}/api/vaccination/pet/${petId}`,
+      { headers: { Authorization: `Bearer ${storedToken}` } }
+    );
+    setVaccinations(res.data);
+    setShowForm(false);
+    resetForm();
+  } catch (err) {
+    console.error("Failed to save vaccination:", err);
+  }
+};
+
+
 
   const handleEdit = vax => {
     setEditId(vax._id);
