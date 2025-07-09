@@ -1,7 +1,6 @@
 // src/components/layout/TopNavbar.jsx
 import { AppBar, Toolbar, Typography, IconButton, Box, Avatar, Menu, MenuItem } from "@mui/material";
 import PetsIcon from "@mui/icons-material/Pets";
-import HomeIcon from "@mui/icons-material/Home";
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -52,7 +51,7 @@ function TopNavbar() {
             component={Link}
             to="/"
           >
-            PawTrack
+            Pawtrack
           </Typography>
         </Box>
 
@@ -74,7 +73,7 @@ function TopNavbar() {
                 anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
               >
                 <MenuItem component={Link} to="/profile" onClick={handleMenuClose}>
-                  <AccountCircleIcon sx={{ mr: 1 }} /> Profiel
+                  <AccountCircleIcon sx={{ mr: 1 }} /> Profile
                 </MenuItem>
                 <MenuItem
                   onClick={() => {
@@ -83,7 +82,7 @@ function TopNavbar() {
                   }}
                   sx={{ color: COLORS.salmon }}
                 >
-                  <LogoutIcon sx={{ mr: 1 }} /> Uitloggen
+                  <LogoutIcon sx={{ mr: 1 }} /> Logout
                 </MenuItem>
               </Menu>
             </>
