@@ -13,7 +13,6 @@ import DashboardPage from "./pages/DashboardPage";
 import MedicationPage from "./pages/MedicationPage";
 import VaccinationPage from "./pages/VaccinationPage";
 import ActivityPage from "./pages/ActivityPage";
-import PetProfilePage from "./pages/PetProfilePage";
 
 import TopNavbar from "./components/Navbar/TopNavbar";
 import BottomNavbar from "./components/Navbar/BottomNavbar";
