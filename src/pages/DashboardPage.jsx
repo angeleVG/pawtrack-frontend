@@ -71,7 +71,7 @@ const handleImageUpload = (e) => {
   {
     icon: <VaccinesOutlined />,
     label: "Vaccinations",
-    route: "/vaccinations",
+    route: "/vaccination",
     bgColor: "#e6fff3", // minty green
   },
   {
