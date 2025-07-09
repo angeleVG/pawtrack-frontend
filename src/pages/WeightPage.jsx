@@ -21,27 +21,27 @@ import {
 import axios from "axios";
 import DeleteIcon from "@mui/icons-material/Delete";
 
+ const API_URL = process.env.REACT_APP_API_URL;
 
 function WeightPage() {
   const [weights, setWeights] = useState([]);
   const [newWeight, setNewWeight] = useState("");
   const [showForm, setShowForm] = useState(false);
 
+
   const storedToken = localStorage.getItem("authToken");
 
 const fetchWeights = useCallback(async () => {
   try {
-    const res = await axios.get("/api/weight", {
+    const res = await axios.get(`${API_URL}/api/weight`, {
       headers: { Authorization: `Bearer ${storedToken}` },
     });
-    // always set to an array
     setWeights(Array.isArray(res.data) ? res.data : []);
   } catch (err) {
     console.error("Error fetching weights:", err);
-    setWeights([]); // fallback to empty array on error
+    setWeights([]);
   }
-}, [storedToken]);
-
+}, [storedToken]); 
 
   useEffect(() => {
     fetchWeights();
@@ -50,8 +50,7 @@ const fetchWeights = useCallback(async () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(
-        "/api/weight",
+      await axios.post(`${API_URL}/api/weight`,
         { value: newWeight },
         {
           headers: { Authorization: `Bearer ${storedToken}` },
@@ -65,9 +64,9 @@ const fetchWeights = useCallback(async () => {
     }
   };
 
-  const handleDelete = async (id) => {
+const handleDelete = async (id) => {
   try {
-    await axios.delete(`/api/weight/${id}`, {
+    await axios.delete(`${API_URL}/api/weight/${id}`, {
       headers: { Authorization: `Bearer ${storedToken}` },
     });
     fetchWeights(); // Refresh list 
@@ -184,7 +183,7 @@ const fetchWeights = useCallback(async () => {
             </Typography>
           </Box>
 
-{Array.isArray(weights) && weights.length > 1 && (
+{weights.length > 1 && (
   <>
     <Typography
       variant="subtitle1"
