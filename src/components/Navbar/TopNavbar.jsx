@@ -1,6 +1,7 @@
 // src/components/layout/TopNavbar.jsx
 import { AppBar, Toolbar, Typography, IconButton, Box, Button, Avatar, Menu, MenuItem } from "@mui/material";
 import PetsIcon from "@mui/icons-material/Pets";
+import HomeIcon from "@mui/icons-material/Home";
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -21,7 +22,7 @@ function TopNavbar() {
   const handleMenuOpen = (e) => setAnchorEl(e.currentTarget);
   const handleMenuClose = () => setAnchorEl(null);
 
-  return (
+   return (
     <AppBar
       position="sticky"
       elevation={0}
@@ -33,37 +34,33 @@ function TopNavbar() {
       }}
     >
       <Toolbar sx={{ minHeight: 56, justifyContent: "space-between", p: 0 }}>
-        {/* LEFT: Logo/Titel */}
+        {/* Logo */}
         <Box display="flex" alignItems="center">
-          <PetsIcon sx={{ color: COLORS.teal, fontSize: 34, mr: 1 }} />
+          <IconButton component={Link} to="/" sx={{ color: COLORS.teal }}>
+            <PetsIcon sx={{ fontSize: 32 }} />
+          </IconButton>
           <Typography
             variant="h6"
-            component={Link}
-            to="/"
             sx={{
-              textDecoration: "none",
               color: COLORS.teal,
               fontWeight: "bold",
+              ml: 1,
+              display: { xs: "none", sm: "block" },
               letterSpacing: 2,
-              fontSize: { xs: "1.1rem", sm: "1.3rem" },
+              textDecoration: "none",
             }}
+            component={Link}
+            to="/"
           >
             PawTrack
           </Typography>
         </Box>
 
-        {/* RIGHT: Menu/Profile */}
+        {/* icons only right */}
         <Box display="flex" alignItems="center">
           {isLoggedIn ? (
             <>
-              {/* Desktop: Profile Avatar + Logout */}
-              <IconButton
-                onClick={handleMenuOpen}
-                size="large"
-                sx={{ ml: 1 }}
-                color="inherit"
-                aria-label="account"
-              >
+              <IconButton onClick={handleMenuOpen} sx={{ color: COLORS.teal }}>
                 {user?.image ? (
                   <Avatar src={user.image} alt={user.name} />
                 ) : (
@@ -76,11 +73,7 @@ function TopNavbar() {
                 onClose={handleMenuClose}
                 anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
               >
-                <MenuItem
-                  component={Link}
-                  to="/profile"
-                  onClick={handleMenuClose}
-                >
+                <MenuItem component={Link} to="/profile" onClick={handleMenuClose}>
                   <AccountCircleIcon sx={{ mr: 1 }} /> Profiel
                 </MenuItem>
                 <MenuItem
@@ -96,43 +89,9 @@ function TopNavbar() {
             </>
           ) : (
             <>
-              {/* Login */}
-              <Button
-                component={Link}
-                to="/login"
-                startIcon={<LoginIcon />}
-                variant="contained"
-                sx={{
-                  ml: 2,
-                  bgcolor: COLORS.teal,
-                  ":hover": { bgcolor: COLORS.salmon },
-                  fontWeight: 600,
-                  borderRadius: 2,
-                  boxShadow: "none",
-                  textTransform: "none",
-                }}
-              >
-                Inloggen
-              </Button>
-              <Button
-                component={Link}
-                to="/signup"
-                variant="outlined"
-                sx={{
-                  ml: 1,
-                  borderColor: COLORS.teal,
-                  color: COLORS.teal,
-                  fontWeight: 600,
-                  borderRadius: 2,
-                  textTransform: "none",
-                  ":hover": {
-                    bgcolor: "#e0f7f5",
-                    borderColor: COLORS.teal,
-                  },
-                }}
-              >
-                Aanmelden
-              </Button>
+              <IconButton component={Link} to="/login" sx={{ color: COLORS.teal }}>
+                <LoginIcon sx={{ fontSize: 28 }} />
+              </IconButton>
             </>
           )}
         </Box>
