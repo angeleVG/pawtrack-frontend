@@ -164,7 +164,7 @@ function ActivityPage() {
           />
 
           <Button type="submit" variant="contained" fullWidth sx={{ bgcolor: "#00bfa6", "&:hover": { bgcolor: "#009e8e" } }}>
-            {editId ? "Update Activity" : "Add Activity"}
+            {editId ? "Update Activity" : "+ Add Activity"}
           </Button>
 
           {editId && (
@@ -177,7 +177,7 @@ function ActivityPage() {
 
       <Box mt={4}>
         <Typography variant="h6" mb={2} sx={{ color: "#2c3e50", fontWeight: 500 }}>
-          Activity List
+          Daily Activities
         </Typography>
 
         <Stack spacing={2}>
