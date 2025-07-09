@@ -17,7 +17,6 @@ import PetProfilePage from "./pages/PetProfilePage";
 
 import TopNavbar from "./components/Navbar/TopNavbar";
 import BottomNavbar from "./components/Navbar/BottomNavbar";
-import Footer from "./components/Footer";
 import IsPrivate from "./components/IsPrivate/IsPrivate";
 import IsAnon from "./components/IsAnon/IsAnon";
 
