@@ -1,4 +1,4 @@
-// src/components/layout/TopNavbar.jsx
+
 import { AppBar, Toolbar, Typography, IconButton, Box, Avatar, Menu, MenuItem } from "@mui/material";
 import PetsIcon from "@mui/icons-material/Pets";
 import LoginIcon from "@mui/icons-material/Login";
@@ -17,6 +17,7 @@ const COLORS = {
 
 function TopNavbar() {
   const { isLoggedIn, user, logOutUser } = useContext(AuthContext);
+    const logoTarget = isLoggedIn ? "/dashboard" : "/";
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleMenuOpen = (e) => setAnchorEl(e.currentTarget);
@@ -36,7 +37,7 @@ function TopNavbar() {
       <Toolbar sx={{ minHeight: 56, justifyContent: "space-between", p: 0 }}>
         {/* Logo */}
         <Box display="flex" alignItems="center">
-          <IconButton component={Link} to="/" sx={{ color: COLORS.teal }}>
+          <IconButton component={Link} to={logoTarget} sx={{ color: COLORS.teal }}>
             <PetsIcon sx={{ fontSize: 32 }} />
           </IconButton>
           <Typography
@@ -50,7 +51,7 @@ function TopNavbar() {
               textDecoration: "none",
             }}
             component={Link}
-            to="/"
+            to={logoTarget}
           >
             Pawtrack
           </Typography>
