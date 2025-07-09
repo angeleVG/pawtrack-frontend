@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation  } from "react-router-dom";
 
 import HomePage from "./pages/HomePage";
 import ProfilePage from "./pages/ProfilePage";
@@ -20,10 +20,16 @@ import BottomNavbar from "./components/Navbar/BottomNavbar";
 import IsPrivate from "./components/IsPrivate/IsPrivate";
 import IsAnon from "./components/IsAnon/IsAnon";
 
+
+
 function App() {
+    const location = useLocation(); 
+ const hideNavbarOn = ["/", "/login", "/signup"]; // not show navbar
+ const hideNavbars = hideNavbarOn.includes(location.pathname); // fasle is show navbar
+
   return (
     <div className="App">
-      <TopNavbar />
+          {!hideNavbars && <TopNavbar />}
 
 {/* public routes */}
       <Routes>
@@ -47,14 +53,6 @@ function App() {
         />
 
 {/* private routes */}
-  <Route
-          path="/petprofile"
-          element={
-            <IsPrivate>
-              <PetProfilePage />
-            </IsPrivate>
-          }
-        />
         <Route
           path="/profile"
           element={
