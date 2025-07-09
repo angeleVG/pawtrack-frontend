@@ -114,6 +114,7 @@ export default function BottomNavbar() {
           sx: {
             width: 270,
             maxWidth: "90vw",
+            color: "#2E3A59",
             bgcolor: COLORS.background,
             pt: 2,
             boxSizing: "border-box",
@@ -152,7 +153,7 @@ export default function BottomNavbar() {
             >
               <ListItemIcon
                 sx={{
-                  color: COLORS.primary,
+                   color: "#2E3A59",
                   minWidth: 36,
                 }}
               >
