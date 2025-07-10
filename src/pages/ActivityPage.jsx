@@ -159,7 +159,10 @@ function ActivityPage() {
             select
             label="Type"
             value={type}
-            onChange={(e) => setType(e.target.value)}
+          onChange={(e) => {
+  setType(e.target.value);
+  setError("");
+}}
             fullWidth
             variant="outlined"
           >
@@ -172,7 +175,10 @@ function ActivityPage() {
             label="Times per day"
             type="number"
             value={timesPerDay}
-            onChange={(e) => setTimesPerDay(e.target.value)}
+        onChange={e => {
+  setTimesPerDay(e.target.value);
+  setError("");
+}}
             fullWidth
             variant="outlined"
             inputProps={{ min: 1 }}
@@ -182,7 +188,10 @@ function ActivityPage() {
             label="How long in minutes"
             type="number"
             value={duration}
-            onChange={(e) => setDuration(e.target.value)}
+        onChange={e => {
+  setDuration(e.target.value);
+  setError("");
+}}
             fullWidth
             variant="outlined"
             inputProps={{ min: 1 }}
@@ -191,7 +200,10 @@ function ActivityPage() {
           <TextField
             label="Notes"
             value={notes}
-            onChange={(e) => setNotes(e.target.value)}
+        onChange={e => {
+  setNotes(e.target.value);
+  setError("");
+}}
             fullWidth
             multiline
             rows={2}
