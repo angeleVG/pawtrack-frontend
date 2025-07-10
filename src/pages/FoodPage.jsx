@@ -46,7 +46,7 @@ function FoodPage() {
 
   const storedToken = localStorage.getItem("authToken");
 
-  // Ophalen opgeslagen voeding
+  // get saved food
   const fetchFood = async () => {
     try {
       const res = await axios.get(
@@ -68,7 +68,7 @@ function FoodPage() {
     }
   };
 
-  // Ophalen allergieën
+  // get allergies
   const fetchPet = async () => {
     try {
       const res = await axios.get(
