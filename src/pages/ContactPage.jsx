@@ -1,3 +1,4 @@
+
 import { useParams } from "react-router-dom";
 import {
   Box,
@@ -10,7 +11,7 @@ import {
   MenuItem,
 } from "@mui/material";
 import { Edit, Delete, Add } from "@mui/icons-material";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback} from "react";
 import axios from "axios";
 
 const COLORS = {
@@ -44,17 +45,22 @@ function ContactsPage() {
   const [editId, setEditId] = useState(null);
   const [form, setForm] = useState({ name: "", phone: "", relation: "" });
 
-  // Ophalen contacten
-  const fetchContacts = async () => {
+  // get contacts
+const fetchContacts = useCallback(async () => {
+  if (petId) {
     try {
       const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/contacts/${petId}`);
       setContacts(res.data);
     } catch {
       setContacts([]);
     }
-  };
+  }
+}, [petId]);
 
-  useEffect(() => { if (petId) fetchContacts(); }, [petId]);
+useEffect(() => {
+  fetchContacts();
+}, [fetchContacts]);
+
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
