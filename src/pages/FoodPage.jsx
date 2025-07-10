@@ -233,7 +233,7 @@ function FoodPage() {
                 type="number"
               />
 
-              {/* Allergieën */}
+              {/* Allergies */}
               <FormControlLabel
                 control={
                   <Switch
@@ -380,7 +380,7 @@ function FoodPage() {
             </>
           )}
 
-          {/* --- OVERZICHT MET ICONS --- */}
+          {/* icons */}
           {foodId && !editMode && (
             <Box mt={1}>
               <Stack
