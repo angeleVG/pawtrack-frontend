@@ -18,7 +18,7 @@ import TopNavbar from "./components/Navbar/TopNavbar";
 import BottomNavbar from "./components/Navbar/BottomNavbar";
 import IsPrivate from "./components/IsPrivate/IsPrivate";
 import IsAnon from "./components/IsAnon/IsAnon";
-
+import { Box } from "@mui/material";
 
 
 function App() {
@@ -27,7 +27,7 @@ function App() {
  const hideNavbars = hideNavbarOn.includes(location.pathname); // fasle is show navbar
 
   return (
-    <div className="App">
+        <Box sx={{ pb: '60px', minHeight: '100vh', background: '#f7fdfc' }}>
           {!hideNavbars && <TopNavbar />}
 
 {/* public routes */}
@@ -92,7 +92,6 @@ function App() {
     </IsPrivate>
   }
 />
-
         <Route
           path="/medication"
           element={
@@ -122,7 +121,7 @@ function App() {
 
       </Routes>
         <BottomNavbar />
-    </div>
+    </Box>
   );
 }
 

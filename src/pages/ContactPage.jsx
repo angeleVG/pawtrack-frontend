@@ -38,12 +38,13 @@ const contactTypes = [
   { value: "other", label: "Other" },
 ];
 
-function ContactsPage() {
+function ContactPage() {
   const { petId } = useParams();
   const [contacts, setContacts] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [editId, setEditId] = useState(null);
   const [form, setForm] = useState({ name: "", phone: "", relation: "" });
+  const [error, setError] = useState(""); 
 
   const storedToken = localStorage.getItem("authToken");
 
@@ -55,12 +56,19 @@ function ContactsPage() {
         { headers: { Authorization: `Bearer ${storedToken}` } }
       );
       setContacts(res.data);
+        setError("");
     } catch (err) {
-      console.log("Error fetching contacts:", err.response?.data || err.message);
-      setContacts([]);
+        const msg =
+          err.response?.data?.message ||
+          err.response?.data ||
+          err.message ||
+          "Failed to load contacts. Please try again.";
+        setContacts([]);
+        setError(msg);
+        console.log("Error fetching contacts:", msg);
+      }
     }
-  }
-}, [petId, storedToken]);
+  }, [petId, storedToken]);
 
 useEffect(() => {
   fetchContacts();
@@ -90,14 +98,21 @@ useEffect(() => {
     setEditId(null);
     setForm({ name: "", phone: "", relation: "" });
   } catch (err) {
-    console.log("Error creating contact:", err.response?.data || err.message);
-  }
-};
+    const msg =
+        err.response?.data?.message ||
+        err.response?.data ||
+        err.message ||
+        "Unable to save contact. Please check your input.";
+      setError(msg);
+      console.log("Error creating contact:", msg);
+    }
+  };
 
   const handleEdit = (contact) => {
     setForm({ name: contact.name, phone: contact.phone, relation: contact.relation });
     setEditId(contact._id);
     setShowForm(true);
+       setError("");
   };
 
 const handleDelete = async (id) => {
@@ -107,10 +122,17 @@ const handleDelete = async (id) => {
       { headers: { Authorization: `Bearer ${storedToken}` } }
     );
     fetchContacts();
+         setError("");
   } catch (err) {
-    console.log("Error deleting contact:", err.response?.data || err.message);
-  }
-};
+     const msg =
+        err.response?.data?.message ||
+        err.response?.data ||
+        err.message ||
+        "Unable to delete contact. Please try again.";
+      setError(msg);
+      console.log("Error deleting contact:", msg);
+    }
+  };
 
   return (
     <Box
@@ -131,6 +153,27 @@ const handleDelete = async (id) => {
       >
         Contacts
       </Typography>
+
+  {/* Error message block */}
+      {error && (
+        <Paper
+          elevation={2}
+          sx={{
+            bgcolor: COLORS.error,
+            color: "#fff",
+            px: 2,
+            py: 1,
+            borderRadius: 2,
+            textAlign: "center",
+            fontWeight: 600,
+            fontSize: 15,
+            mb: 2,
+          }}
+        >
+          {error}
+        </Paper>
+      )}
+
 
       <Paper elevation={3} sx={{ p: 2, borderRadius: 3, mb: 3 }}>
         <Stack spacing={2}>
@@ -226,7 +269,7 @@ const handleDelete = async (id) => {
               >
                 {editId ? "Save Changes" : "Add Contact"}
               </Button>
-              <Button onClick={() => { setShowForm(false); setEditId(null); setForm({ name: "", phone: "", relation: "" }); }}>
+              <Button onClick={() => { setShowForm(false); setEditId(null); setForm({ name: "", phone: "", relation: "" });  setError(""); }}>
                 Cancel
               </Button>
             </Stack>
@@ -253,4 +296,4 @@ const handleDelete = async (id) => {
   );
 }
 
-export default ContactsPage;
+export default ContactPage;

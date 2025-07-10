@@ -62,6 +62,7 @@ export default function BottomNavbar() {
       <Paper
         sx={{
           position: "fixed",
+          width: "100vw",
           bottom: 0,
           left: 0,
           right: 0,
@@ -69,8 +70,6 @@ export default function BottomNavbar() {
           borderRadius: 0,
           bgcolor: "#fff",
           borderTop: `1px solid ${COLORS.divider}`,
-          maxWidth: 600,
-          margin: "0 auto",
         }}
         elevation={3}
       >
