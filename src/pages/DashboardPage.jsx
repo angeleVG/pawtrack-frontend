@@ -12,7 +12,12 @@ function DashboardPage() {
   const [pet, setPet] = useState(null);
   const navigate = useNavigate();
 
+  const [error, setError] = useState("");
+const [imageError, setImageError] = useState("");
+
+
  useEffect(() => {
+    setError(""); 
   const storedToken = localStorage.getItem("authToken");
 
  axios.get(`${process.env.REACT_APP_API_URL}/api/pet`, {
@@ -30,14 +35,15 @@ function DashboardPage() {
         setPet(null); // no pet = show form
       }
     })
-    .catch((err) => {
-      console.error("Error fetching pet:", err);
+     .catch(() => {
+      setError("Failed to load your pet. Please try again.");
       setPet(null);
     });
 }, []);
 
 // replacing avatar for image
 const handleImageUpload = (e) => {
+    setImageError("");
   const file = e.target.files[0];
   if (!file) return;
 
@@ -57,7 +63,7 @@ const handleImageUpload = (e) => {
     setPet((prevPet) => ({ ...prevPet, image: newImageUrl }));
   })
   .catch((err) => {
-    console.error("Error uploading image:", err);
+    setImageError("Failed to upload image. Please try again.");
   });
 };
 
@@ -103,7 +109,17 @@ const handleImageUpload = (e) => {
 
   return (
      <Box p={2} display="flex" flexDirection="column" alignItems="center"   sx={{ backgroundColor: "#f7fdfc", minHeight: "100vh" }}>
-      {!pet ? (
+     {error && (
+  <Typography color="error" sx={{ mb: 2, fontSize: "1rem" }}>
+    {error}
+  </Typography>
+)}
+{imageError && (
+  <Typography color="error" sx={{ mb: 2, fontSize: "1rem" }}>
+    {imageError}
+  </Typography>
+)}
+ {!pet ? (
          <PetForm onSubmitSuccess={(newPet) => setPet(newPet)} />
       ) : (
         <>
