@@ -83,7 +83,7 @@ const handleImageUpload = (e) => {
   {
     icon: <ContactPhoneOutlined />,
     label: "Contacts",
-    route: "/contacts",
+  route: pet ? `/pet/${pet._id}/contacts` : "#",
     bgColor: "#e6f9ff", // light aqua
   },
   {

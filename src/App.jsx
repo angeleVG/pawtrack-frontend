@@ -84,14 +84,15 @@ function App() {
     </IsPrivate>
   }
 />
-        <Route
-          path="/contacts"
-          element={
-            <IsPrivate>
-              <ContactPage />
-            </IsPrivate>
-          }
-        />
+       <Route
+  path="/pet/:petId/contacts"
+  element={
+    <IsPrivate>
+      <ContactPage />
+    </IsPrivate>
+  }
+/>
+
         <Route
           path="/medication"
           element={
