@@ -24,7 +24,7 @@ import { Box } from "@mui/material";
 function App() {
     const location = useLocation(); 
  const hideNavbarOn = ["/", "/login", "/signup"]; // not show navbar
- const hideNavbars = hideNavbarOn.includes(location.pathname); // fasle is show navbar
+ const hideNavbars = hideNavbarOn.includes(location.pathname); // false is show navbar
 
   return (
         <Box sx={{ pb: '60px', minHeight: '100vh', background: '#f7fdfc' }}>

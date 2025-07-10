@@ -1,12 +1,15 @@
 import React, { useContext, useEffect } from "react";
 import { AuthContext } from "../context/auth.context";
 import { Box, Typography, Button } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 
 const HomePage = () => {
   const { isLoggedIn } = useContext(AuthContext);
   const navigate = useNavigate();
+    const location = useLocation();
+  const error = location.state?.error || "";
+
 
  useEffect(() => {
     if (isLoggedIn) {
@@ -42,6 +45,13 @@ const HomePage = () => {
       <Typography color="text.secondary" mb={4}>
         Keep your pet's health organized, all in one place.
       </Typography>
+
+  {/* Error message */}
+      {error && (
+        <Typography color="error" sx={{ mb: 2, fontSize: "1rem" }}>
+          {error}
+        </Typography>
+      )}
 
       <Box sx={{ width: "100%", maxWidth: 300 }}>
         <Button
