@@ -24,16 +24,16 @@ const COLORS = {
 const contactTypes = [
   { value: "owner", label: "Owner" },
   { value: "vet", label: "Vet" },
-  { value: "animal ambulance", label: "Animal Ambulance" },
+  { value: "animal ambulance", label: "Animal ambulance" },
   { value: "groomer", label: "Groomer" },
   { value: "trainer", label: "Trainer" },
   { value: "petsitter", label: "Petsitter" },
   { value: "walker", label: "Walker" },
   { value: "breeder", label: "Breeder" },
   { value: "insurance", label: "Insurance" },
-  { value: "emergency contact", label: "Emergency Contact" },
+  { value: "emergency contact", label: "Emergency contact" },
   { value: "shelter", label: "Shelter" },
-  { value: "boarding", label: "Boarding/Kennel" },
+  { value: "boarding", label: "Boarding" },
   { value: "pharmacy", label: "Pharmacy" },
   { value: "other", label: "Other" },
 ];
@@ -51,7 +51,8 @@ const fetchContacts = useCallback(async () => {
     try {
       const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/contacts/${petId}`);
       setContacts(res.data);
-    } catch {
+    } catch (err) {
+      console.log("Error fetching contacts:", err.response?.data || err.message);
       setContacts([]);
     }
   }
@@ -76,7 +77,9 @@ useEffect(() => {
       setShowForm(false);
       setEditId(null);
       setForm({ name: "", phone: "", relation: "" });
-    } catch {}
+    } catch (err) {
+  console.log("Error creating contact:", err.response?.data || err.message);
+}
   };
 
   const handleEdit = (contact) => {
@@ -85,10 +88,14 @@ useEffect(() => {
     setShowForm(true);
   };
 
-  const handleDelete = async (id) => {
+const handleDelete = async (id) => {
+  try {
     await axios.delete(`${process.env.REACT_APP_API_URL}/api/contacts/${id}`);
     fetchContacts();
-  };
+  } catch (err) {
+    console.log("Error deleting contact:", err.response?.data || err.message);
+  }
+};
 
   return (
     <Box
