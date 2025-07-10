@@ -39,14 +39,16 @@ export default function BottomNavbar() {
     { label: "Menu", icon: <MenuIcon />, isDrawer: true },
   ];
 
+  const petId = localStorage.getItem("activePetId");
+
   // All other pages in the drawer
   const drawerPages = [
     { label: "Weight", icon: <MonitorWeightIcon />, path: "/weight" },
-    { label: "Food", icon: <RestaurantIcon />, path: "/food" },
+    { label: "Food", icon: <RestaurantIcon />, path: petId ? `/pet/${petId}/food` : "#" },
     { label: "Medication", icon: <MedicationIcon />, path: "/medication" },
     { label: "Activity", icon: <DirectionsRunIcon />, path: "/activity" },
     { label: "Vaccination", icon: <VaccinesIcon />, path: "/vaccination" },
-    { label: "Contacts", icon: <ContactsIcon />, path: "/contacts" },
+{ label: "Contacts", icon: <ContactsIcon />, path: petId ? `/pet/${petId}/contacts` : "#" },
   ];
 
   // Highlight Home if on dashboard
