@@ -45,18 +45,22 @@ function ContactsPage() {
   const [editId, setEditId] = useState(null);
   const [form, setForm] = useState({ name: "", phone: "", relation: "" });
 
-  // get contacts
-const fetchContacts = useCallback(async () => {
+  const storedToken = localStorage.getItem("authToken");
+
+ const fetchContacts = useCallback(async () => {
   if (petId) {
     try {
-      const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/contacts/${petId}`);
+      const res = await axios.get(
+        `${process.env.REACT_APP_API_URL}/api/contacts/${petId}`,
+        { headers: { Authorization: `Bearer ${storedToken}` } }
+      );
       setContacts(res.data);
     } catch (err) {
       console.log("Error fetching contacts:", err.response?.data || err.message);
       setContacts([]);
     }
   }
-}, [petId]);
+}, [petId, storedToken]);
 
 useEffect(() => {
   fetchContacts();
@@ -65,22 +69,30 @@ useEffect(() => {
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      if (editId) {
-        await axios.put(`${process.env.REACT_APP_API_URL}/api/contacts/${editId}`, form);
-      } else {
-        await axios.post(`${process.env.REACT_APP_API_URL}/api/contacts`, { ...form, pet: petId });
-      }
-      fetchContacts();
-      setShowForm(false);
-      setEditId(null);
-      setForm({ name: "", phone: "", relation: "" });
-    } catch (err) {
-  console.log("Error creating contact:", err.response?.data || err.message);
-}
-  };
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    if (editId) {
+      await axios.put(
+        `${process.env.REACT_APP_API_URL}/api/contacts/${editId}`,
+        form,
+        { headers: { Authorization: `Bearer ${storedToken}` } }
+      );
+    } else {
+      await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/contacts`,
+        { ...form, pet: petId },
+        { headers: { Authorization: `Bearer ${storedToken}` } }
+      );
+    }
+    fetchContacts();
+    setShowForm(false);
+    setEditId(null);
+    setForm({ name: "", phone: "", relation: "" });
+  } catch (err) {
+    console.log("Error creating contact:", err.response?.data || err.message);
+  }
+};
 
   const handleEdit = (contact) => {
     setForm({ name: contact.name, phone: contact.phone, relation: contact.relation });
@@ -90,7 +102,10 @@ useEffect(() => {
 
 const handleDelete = async (id) => {
   try {
-    await axios.delete(`${process.env.REACT_APP_API_URL}/api/contacts/${id}`);
+    await axios.delete(
+      `${process.env.REACT_APP_API_URL}/api/contacts/${id}`,
+      { headers: { Authorization: `Bearer ${storedToken}` } }
+    );
     fetchContacts();
   } catch (err) {
     console.log("Error deleting contact:", err.response?.data || err.message);
