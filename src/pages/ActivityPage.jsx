@@ -35,7 +35,7 @@ function ActivityPage() {
         headers: { Authorization: `Bearer ${storedToken}` },
       })
       .then((res) => setActivities(res.data))
-      .catch((err) => console.error("Error loading tasks", err));
+      .catch(() => setError("Could not load activities. Please try again."));
   }, []);
 
   const resetForm = () => {
@@ -46,8 +46,11 @@ function ActivityPage() {
     setEditId(null);
   };
 
+  const [error, setError] = useState("");
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    setError("");
     const storedToken = localStorage.getItem("authToken");
 
     const taskData = {
@@ -62,9 +65,13 @@ function ActivityPage() {
     };
 
     const request = editId
-      ? axios.put(`${process.env.REACT_APP_API_URL}/api/task/${editId}`, taskData, {
-          headers: { Authorization: `Bearer ${storedToken}` },
-        })
+      ? axios.put(
+          `${process.env.REACT_APP_API_URL}/api/task/${editId}`,
+          taskData,
+          {
+            headers: { Authorization: `Bearer ${storedToken}` },
+          }
+        )
       : axios.post(`${process.env.REACT_APP_API_URL}/api/task`, taskData, {
           headers: { Authorization: `Bearer ${storedToken}` },
         });
@@ -72,13 +79,15 @@ function ActivityPage() {
     request
       .then((res) => {
         if (editId) {
-          setActivities((prev) => prev.map((task) => (task._id === editId ? res.data : task)));
+          setActivities((prev) =>
+            prev.map((task) => (task._id === editId ? res.data : task))
+          );
         } else {
           setActivities([...activities, res.data]);
         }
         resetForm();
       })
-      .catch((err) => console.error("Error saving task", err));
+      .catch(() => setError("Could not save activity. Try again."));
   };
 
   const handleEdit = (task) => {
@@ -90,33 +99,59 @@ function ActivityPage() {
   };
 
   const handleDelete = (id) => {
+    setError("");
     const storedToken = localStorage.getItem("authToken");
     axios
       .delete(`${process.env.REACT_APP_API_URL}/api/task/${id}`, {
         headers: { Authorization: `Bearer ${storedToken}` },
       })
-      .then(() => setActivities((prev) => prev.filter((task) => task._id !== id)))
-      .catch((err) => console.error("Error deleting task", err));
+      .then(() =>
+        setActivities((prev) => prev.filter((task) => task._id !== id))
+      )
+      .catch(() => setError("Could not delete activity. Please try again."));
   };
 
   const activityIcon = (type) => {
     switch (type) {
       case "walk":
-        return <DirectionsWalkIcon sx={{ color: "#2c3e50", fontSize: 28, mr: 1 }} />;
+        return (
+          <DirectionsWalkIcon sx={{ color: "#2c3e50", fontSize: 28, mr: 1 }} />
+        );
       case "play":
-        return <SportsEsportsIcon sx={{ color: "#2c3e50", fontSize: 28, mr: 1 }} />;
+        return (
+          <SportsEsportsIcon sx={{ color: "#2c3e50", fontSize: 28, mr: 1 }} />
+        );
       case "train":
-        return <EmojiObjectsIcon sx={{ color: "#2c3e50", fontSize: 28, mr: 1 }} />;
+        return (
+          <EmojiObjectsIcon sx={{ color: "#2c3e50", fontSize: 28, mr: 1 }} />
+        );
       default:
         return null;
     }
   };
 
   return (
-    <Box px={2} py={3} maxWidth="sm" mx="auto" sx={{ backgroundColor: "#f7fdfc", minHeight: "100vh" }}>
-      <Typography variant="h5" mb={3} color="primary" sx={{ color: "#00bfa6", fontWeight: 600 }}>
+    <Box
+      px={2}
+      py={3}
+      maxWidth="sm"
+      mx="auto"
+      sx={{ backgroundColor: "#f7fdfc", minHeight: "100vh" }}
+    >
+      <Typography
+        variant="h5"
+        mb={3}
+        color="primary"
+        sx={{ color: "#00bfa6", fontWeight: 600 }}
+      >
         {editId ? "Edit Activity" : "Add Activity"}
       </Typography>
+
+      {error && (
+        <Typography color="error" mb={2}>
+          {error}
+        </Typography>
+      )}
 
       <form onSubmit={handleSubmit}>
         <Stack spacing={2}>
@@ -163,12 +198,22 @@ function ActivityPage() {
             variant="outlined"
           />
 
-          <Button type="submit" variant="contained" fullWidth sx={{ bgcolor: "#00bfa6", "&:hover": { bgcolor: "#009e8e" } }}>
+          <Button
+            type="submit"
+            variant="contained"
+            fullWidth
+            sx={{ bgcolor: "#00bfa6", "&:hover": { bgcolor: "#009e8e" } }}
+          >
             {editId ? "Update Activity" : "+ Add Activity"}
           </Button>
 
           {editId && (
-            <Button variant="outlined" color="secondary" onClick={resetForm} fullWidth>
+            <Button
+              variant="outlined"
+              color="secondary"
+              onClick={resetForm}
+              fullWidth
+            >
               Cancel
             </Button>
           )}
@@ -176,17 +221,28 @@ function ActivityPage() {
       </form>
 
       <Box mt={4}>
-        <Typography variant="h6" mb={2} sx={{ color: "#2c3e50", fontWeight: 500 }}>
+        <Typography
+          variant="h6"
+          mb={2}
+          sx={{ color: "#2c3e50", fontWeight: 500 }}
+        >
           Daily Activities
         </Typography>
 
         <Stack spacing={2}>
           {activities.map((task) => (
-            <Card key={task._id} sx={{ backgroundColor: "#f5f5f5", borderRadius: 2 }}>
+            <Card
+              key={task._id}
+              sx={{ backgroundColor: "#f5f5f5", borderRadius: 2 }}
+            >
               <CardContent>
                 <Box display="flex" alignItems="center" mb={1}>
                   {activityIcon(task.type)}
-                  <Typography variant="subtitle1" fontWeight="bold" sx={{ color: "#2c3e50" }}>
+                  <Typography
+                    variant="subtitle1"
+                    fontWeight="bold"
+                    sx={{ color: "#2c3e50" }}
+                  >
                     {task.type} – {task.duration} min × {task.timesPerDay}
                   </Typography>
                 </Box>
@@ -197,10 +253,16 @@ function ActivityPage() {
                 )}
               </CardContent>
               <CardActions sx={{ justifyContent: "flex-end" }}>
-                <IconButton onClick={() => handleEdit(task)} sx={{ color: "#00bfa6" }}>
+                <IconButton
+                  onClick={() => handleEdit(task)}
+                  sx={{ color: "#00bfa6" }}
+                >
                   <EditIcon />
                 </IconButton>
-                <IconButton onClick={() => handleDelete(task._id)} sx={{ color: "#f44336" }}>
+                <IconButton
+                  onClick={() => handleDelete(task._id)}
+                  sx={{ color: "#f44336" }}
+                >
                   <DeleteIcon />
                 </IconButton>
               </CardActions>

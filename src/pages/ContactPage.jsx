@@ -280,7 +280,7 @@ const handleDelete = async (id) => {
             variant="contained"
             fullWidth
             sx={{
-              backgroundColor: "#2E7CF6",
+              backgroundColor: "#00bfa6",
               color: "#fff",
               fontWeight: 600,
               borderRadius: 2,
