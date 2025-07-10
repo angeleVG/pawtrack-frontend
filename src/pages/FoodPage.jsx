@@ -45,6 +45,7 @@ function FoodPage() {
   const [showSnacks, setShowSnacks] = useState(false);
 
   const storedToken = localStorage.getItem("authToken");
+const [error, setError] = useState("");
 
   // get saved food
   const fetchFood = async () => {
@@ -56,11 +57,13 @@ function FoodPage() {
       if (res.data) {
         setFood(res.data);
         setFoodId(res.data._id);
+        setError("");
         setEditMode(false);
         if (res.data.waterAmount) setShowWater(true);
         if (res.data.snacksPerDay) setShowSnacks(true);
       }
     } catch (err) {
+        setError("Failed to load food info. Please try again.");
       setFoodId(null);
       setEditMode(false);
       setShowWater(false);
@@ -80,6 +83,7 @@ function FoodPage() {
         setAllergiesEnabled(true);
       }
     } catch (err) {
+        setError("Failed to load allergies.");
       setAllergies([]);
       setAllergiesEnabled(false);
     }
@@ -94,6 +98,7 @@ function FoodPage() {
   }, [petId, storedToken]);
 
   const handleChange = (e) => {
+      setError("");
     setFood((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
@@ -129,7 +134,7 @@ function FoodPage() {
       await fetchFood();
       setEditMode(false);
     } catch (err) {
-      console.error("Failed to save food:", err);
+     setError("Failed to save food info. Please try again.");
     }
   };
 
@@ -158,7 +163,7 @@ function FoodPage() {
       setAllergiesEnabled(false);
       alert("Food info deleted!");
     } catch (err) {
-      alert("Failed to delete food info");
+  setError("Failed to delete food info.");
     }
   };
 
@@ -192,9 +197,15 @@ function FoodPage() {
         Food Info
       </Typography>
 
+{error && (
+  <Typography color="error" sx={{ mb: 2, fontSize: "1rem" }}>
+    {error}
+  </Typography>
+)}
+
       <Paper elevation={3} sx={{ p: 2, borderRadius: 3 }}>
         <Stack spacing={2}>
-          {/* --- FORMULIER (bij toevoegen of bewerken) --- */}
+          {/* --- form (updating and editing) --- */}
           {(!foodId || editMode) && (
             <>
               <TextField
