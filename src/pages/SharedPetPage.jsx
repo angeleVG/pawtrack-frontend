@@ -35,7 +35,7 @@ function SharedPetPage() {
       });
   }, [petId]);
 
-  // Show loading spinner 
+  // Show loading spinner
   if (loading) {
     return (
       <Box
@@ -52,7 +52,7 @@ function SharedPetPage() {
     );
   }
 
-  // If  pet is not found, display a simple message
+  // If pet is not found, display a simple message
   if (!pet) {
     return (
       <Box
@@ -72,10 +72,10 @@ function SharedPetPage() {
     );
   }
 
-  // Main content
+  // MAIN CONTENT
   return (
     <Box sx={{ backgroundColor: COLORS.background, minHeight: "100vh", p: 2 }}>
-      {/* Pet Name and Image */}
+      {/* Pet Name, Breed, Birthday, Allergies */}
       <Box sx={{ textAlign: "center", mb: 3 }}>
         <Typography variant="h4" sx={{ color: COLORS.teal }}>
           {pet.name}
@@ -86,19 +86,35 @@ function SharedPetPage() {
             src={pet.image}
             alt={pet.name}
             sx={{
-              width: "100%",           
-              maxWidth: 250,           
+              width: "100%",
+              maxWidth: 250,
               height: "auto",
               borderRadius: 2,
               mt: 2,
             }}
           />
         )}
+        <Typography variant="body1" sx={{ mt: 2, color: COLORS.darkText }}>
+          Breed: {pet.breed || "-"}
+        </Typography>
+        <Typography variant="body1" sx={{ color: COLORS.darkText }}>
+          Birthday:{" "}
+          {pet.birthDate
+            ? new Date(pet.birthDate).toLocaleDateString()
+            : "-"}
+        </Typography>
+        {pet.allergies && pet.allergies.length > 0 && (
+          <Typography
+            variant="body1"
+            sx={{ mt: 1, color: COLORS.salmon, fontWeight: 500 }}
+          >
+            Allergies: {pet.allergies.join(", ")}
+          </Typography>
+        )}
       </Box>
 
-
       <Stack spacing={3}>
-
+        {/* Weights */}
         {pet.weights?.length > 0 && (
           <Box>
             <Typography variant="h6" sx={{ color: COLORS.darkText }}>
@@ -107,26 +123,33 @@ function SharedPetPage() {
             <Divider sx={{ my: 1 }} />
             {pet.weights.map((entry) => (
               <Typography key={entry._id} variant="body2">
-                {entry.date?.slice(0, 10)}: {entry.weight} kg
+                {entry.date
+                  ? new Date(entry.date).toLocaleDateString()
+                  : ""}{" "}
+                {entry.value} kg
               </Typography>
             ))}
           </Box>
         )}
 
-    
+        {/* Food */}
         {pet.food && (
           <Box>
             <Typography variant="h6" sx={{ color: COLORS.darkText }}>
               Food
             </Typography>
             <Divider sx={{ my: 1 }} />
-            <Typography variant="body2">Brand: {pet.food.brand}</Typography>
-            <Typography variant="body2">Product: {pet.food.product}</Typography>
             <Typography variant="body2">
-              Portion Size: {pet.food.portionSize}
+              Brand: {pet.food.brand || "-"}
             </Typography>
             <Typography variant="body2">
-              Frequency: {pet.food.frequency}
+              Product: {pet.food.product || "-"}
+            </Typography>
+            <Typography variant="body2">
+              Portion Size: {pet.food.portionSize ?? "-"}
+            </Typography>
+            <Typography variant="body2">
+              Frequency: {pet.food.frequency ?? "-"}
             </Typography>
             {pet.food.notes && (
               <Typography variant="body2">Notes: {pet.food.notes}</Typography>
@@ -139,6 +162,7 @@ function SharedPetPage() {
           </Box>
         )}
 
+        {/* Medications */}
         {pet.medications?.length > 0 && (
           <Box>
             <Typography variant="h6" sx={{ color: COLORS.darkText }}>
@@ -153,6 +177,7 @@ function SharedPetPage() {
           </Box>
         )}
 
+        {/* Vaccinations */}
         {pet.vaccinations?.length > 0 && (
           <Box>
             <Typography variant="h6" sx={{ color: COLORS.darkText }}>
@@ -161,12 +186,16 @@ function SharedPetPage() {
             <Divider sx={{ my: 1 }} />
             {pet.vaccinations.map((v, index) => (
               <Typography key={index} variant="body2">
-                {v.name} – {v.date?.slice(0, 10)}
+                {v.name} –{" "}
+                {v.dateGiven
+                  ? new Date(v.dateGiven).toLocaleDateString()
+                  : v.date?.slice(0, 10) || ""}
               </Typography>
             ))}
           </Box>
         )}
 
+        {/* Activities */}
         {pet.activities?.length > 0 && (
           <Box>
             <Typography variant="h6" sx={{ color: COLORS.darkText }}>
@@ -181,6 +210,7 @@ function SharedPetPage() {
           </Box>
         )}
 
+        {/* Contacts */}
         {pet.contacts?.length > 0 && (
           <Box>
             <Typography variant="h6" sx={{ color: COLORS.darkText }}>
@@ -189,7 +219,7 @@ function SharedPetPage() {
             <Divider sx={{ my: 1 }} />
             {pet.contacts.map((c) => (
               <Typography key={c._id} variant="body2">
-                {c.name} ({c.type}) – {c.phone}
+                {c.name} ({c.relation}) – {c.phone}
               </Typography>
             ))}
           </Box>
