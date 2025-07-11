@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { Box, Typography, TextField, Button, Alert } from "@mui/material";
 import { AuthContext } from "../context/auth.context";
 import axios from "axios";
+
 function ProfilePage() {
   const { user } = useContext(AuthContext);
 
