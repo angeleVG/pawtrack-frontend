@@ -1,12 +1,13 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { Box, Avatar, Typography, Grid, Card, CardActionArea } from "@mui/material";
+import { Box, Avatar, Typography, Grid, Card, CardActionArea, Button, Snackbar } from "@mui/material";
 import { MedicationOutlined, PetsOutlined, ContactPhoneOutlined, RestaurantOutlined, VaccinesOutlined, MonitorWeightOutlined } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import PetForm from "../components/PetForm";
 import { Tooltip } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 function DashboardPage() {
   const [pet, setPet] = useState(null);
@@ -14,7 +15,7 @@ function DashboardPage() {
 
   const [error, setError] = useState("");
 const [imageError, setImageError] = useState("");
-
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
 
  useEffect(() => {
     setError(""); 
@@ -106,6 +107,11 @@ const handleImageUpload = (e) => {
   },
 ];
 
+ const handleCopyLink = () => {
+    const link = `${window.location.origin}/share/pet/${pet._id}`;
+    navigator.clipboard.writeText(link);
+    setSnackbarOpen(true);
+  };
 
   return (
      <Box p={2} display="flex" flexDirection="column" alignItems="center"   sx={{ backgroundColor: "#f7fdfc", minHeight: "100vh" }}>
@@ -123,8 +129,30 @@ const handleImageUpload = (e) => {
          <PetForm onSubmitSuccess={(newPet) => setPet(newPet)} />
       ) : (
         <>
+        <Button
+  variant="outlined"
+  startIcon={<ContentCopyIcon />}
+  onClick={handleCopyLink}
+  sx={{
+    alignSelf: "flex-end",
+    mb: 2,
+    textTransform: "none",
+    borderRadius: 2,
+    fontWeight: 500,
+    fontSize: "1rem",
+  }}
+>
+  Share Pet link
+</Button>
+<Snackbar
+  open={snackbarOpen}
+  autoHideDuration={2000}
+  onClose={() => setSnackbarOpen(false)}
+  message="Link copied!"
+  anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+/>
          <Box mb={4} display="flex" flexDirection="column" alignItems="center">
-      <Tooltip title="Klik om afbeelding te wijzigen" arrow>
+      <Tooltip title="Click to change photo" arrow>
   
  <Box sx={{ position: "relative", width: 140, height: 140, mb: 2 }}>
   <label htmlFor="avatar-upload">

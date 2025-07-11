@@ -19,7 +19,7 @@ import BottomNavbar from "./components/Navbar/BottomNavbar";
 import IsPrivate from "./components/IsPrivate/IsPrivate";
 import IsAnon from "./components/IsAnon/IsAnon";
 import { Box } from "@mui/material";
-
+import SharedPetPage from "./pages/SharedPetPage";
 
 function App() {
     const location = useLocation(); 
@@ -49,6 +49,11 @@ function App() {
               <LoginPage />
             </IsAnon>
           }
+        />
+
+        <Route 
+        path="/share/pet/:petId" 
+        element={<SharedPetPage />} 
         />
 
 {/* private routes */}
