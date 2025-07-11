@@ -4,18 +4,6 @@
   PawTrack is a full-stack, mobile-first web application designed to help pet owners track and manage all aspects of their pets’ health, activities, and care. The app allows users to register, add pets, track weight, manage food and medication, record activities, log vaccinations, and store emergency contacts, all in one intuitive dashboard.
 </p>
 
-<h2>Table of Contents</h2>
-<ul>
-  <li><a href="#description">Description</a></li>
-  <li><a href="#mvp-features">MVP Features</a></li>
-  <li><a href="#backlog">Backlog / Future Features</a></li>
-  <li><a href="#data-structure">Data Structure</a></li>
-  <li><a href="#state-management">State Management</a></li>
-  <li><a href="#task-list">Task List</a></li>
-  <li><a href="#scripts">Scripts</a></li>
-  <li><a href="#links">Links</a></li>
-</ul>
-
 <h2 id="description">Description</h2>
 <p>
   <strong>PawTrack</strong> enables pet owners to keep all essential pet information organized and accessible. Users can securely log in, add or edit pet data, and visualize important health and care information through a simple, mobile-friendly interface.
@@ -124,8 +112,9 @@
   <li><strong>Frontend Repo:</strong> <a href="https://github.com/yourusername/pawtrack-frontend" target="_blank">github.com/yourusername/pawtrack-frontend</a></li>
   <li><strong>Backend Repo:</strong> <a href="https://github.com/yourusername/pawtrack-backend" target="_blank">github.com/yourusername/pawtrack-backend</a></li>
   <li><strong>Live App:</strong> <a href="https://pawtrack.netlify.app" target="_blank">pawtrack.netlify.app</a></li>
-  <li><strong>Slides:</strong> <a href="https://docs.google.com/presentation/d/..." target="_blank">Google Slides Link</a></li>
-  <li><strong>Trello:</strong> <a href="[https://docs.google.com/presentation/d/...](https://trello.com/invite/b/684dbd1b7b6729ce52eed4cd/ATTId945596664ba07b100d2b6a7350aa4bcA46DE929/pawtrack)" target="_blank">Trello board Link</a></li>
+ <li><strong>Trello:</strong> <a href="https://trello.com/invite/b/684dbd1b7b6729ce52eed4cd/ATTId945596664ba07b100d2b6a7350aa4bcA46DE929/pawtrack" target="_blank">Trello board Link</a></li>
+ <li><strong>Presentation slides:</strong> <a href="https://www.canva.com/design/DAGs5Xs-N4M/q1ESj9d2Yg5DdFo-_DTxcw/view?utm_content=DAGs5Xs-N4M&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=hd269b07db0" target="_blank">
+  Canva Presentation</a></li>
 </ul>
 <p>
   <strong>Avatar Icon:</strong> Pet avatar illustrations by <a href="https://www.flaticon.com/" target="_blank">Freepik - Flaticon</a>.
