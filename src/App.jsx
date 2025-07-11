@@ -106,7 +106,7 @@ function App() {
           }
         />
         <Route
-          path="/vaccination"
+         path="/vaccination"
           element={
             <IsPrivate>
               <VaccinationPage />

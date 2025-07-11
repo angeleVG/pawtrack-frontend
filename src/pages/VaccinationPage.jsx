@@ -84,11 +84,11 @@ const handleSubmit = async e => {
         { headers: { Authorization: `Bearer ${storedToken}` } }
       );
     } else {
-      await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/vaccination`,
-        { ...form, pet: petId },
-        { headers: { Authorization: `Bearer ${storedToken}` } }
-      );
+ await axios.post(
+  `${process.env.REACT_APP_API_URL}/api/vaccination`,
+  { ...form, pet: petId },
+  { headers: { Authorization: `Bearer ${storedToken}` } }
+);
     }
     const res = await axios.get(
       `${process.env.REACT_APP_API_URL}/api/vaccination/pet/${petId}`,
