@@ -1,10 +1,9 @@
 import React from "react";
-import { Box, Typography, Button, Stack, Paper } from "@mui/material";
+import { Box, Typography, Button, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 const COLORS = {
   background: "#f7fdfc",
-  teal: "#00bfa6",
   darkText: "#2E3A59",
   button: "#003366",
   buttonHover: "#002244",
@@ -14,7 +13,7 @@ function NotFoundPage() {
   const navigate = useNavigate();
 
   const handleGoHome = () => {
-    navigate("/dashboard");
+    navigate("/");
   };
 
   return (
@@ -25,17 +24,14 @@ function NotFoundPage() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        padding: 2,
+        padding: 3,
       }}
     >
-      <Paper
-        elevation={3}
+      <Box
         sx={{
           width: "100%",
-          maxWidth: { xs: 320, sm: 400 },
-          padding: { xs: 3, sm: 4 },
+          maxWidth: 400,
           textAlign: "center",
-          borderRadius: 4,
         }}
       >
         <Typography
@@ -46,7 +42,7 @@ function NotFoundPage() {
             fontSize: { xs: "1.6rem", sm: "2rem" },
           }}
         >
-          🐾 404: Sorry, this page is napping.
+          🐾 404: page is napping
         </Typography>
 
         <Typography
@@ -57,7 +53,7 @@ function NotFoundPage() {
             fontSize: { xs: "0.95rem", sm: "1rem" },
           }}
         >
-          Try again later. Or bring snacks.
+          Try again later. Or bring a snack.
         </Typography>
 
         <Box
@@ -97,10 +93,10 @@ function NotFoundPage() {
               paddingX: 3,
             }}
           >
-            Let's head back
+            Go Home
           </Button>
         </Stack>
-      </Paper>
+      </Box>
     </Box>
   );
 }
