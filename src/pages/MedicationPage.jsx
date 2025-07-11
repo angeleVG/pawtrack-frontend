@@ -34,14 +34,22 @@ function MedicationPage() {
 
   const storedToken = localStorage.getItem("authToken");
 
+  const [error, setError] = useState("");
+
 const fetchMedications = useCallback(() => {
   axios
     .get(`${process.env.REACT_APP_API_URL}/api/medications`, {
       headers: { Authorization: `Bearer ${storedToken}` },
     })
-    .then((res) => setMedications(res.data))
-    .catch((err) => console.error("Failed to fetch medications:", err.response || err.message));
-}, [storedToken]);
+    .then((res) => {
+        setMedications(res.data);
+        setError("");
+      })
+      .catch(() => {
+        setError("Failed to load medications. Please try again.");
+      });
+  }, [storedToken]);
+
 
   useEffect(() => {
     fetchMedications();
@@ -49,6 +57,8 @@ const fetchMedications = useCallback(() => {
 
   const handleSubmit = (e) => {
   e.preventDefault();
+    setError("");
+
   const newMed = { name, purpose, dosage, startDate, endDate };
 
   const request = editId
@@ -63,8 +73,11 @@ const fetchMedications = useCallback(() => {
     .then(() => {
       fetchMedications();
       resetForm();
+        setError("");
     })
-    .catch((err) => console.error("Failed to save medication:", err.response || err.message));
+   .catch(() => {
+          setError("Could not save medication. Please try again.");
+    });
 };
 
 
@@ -76,6 +89,7 @@ const fetchMedications = useCallback(() => {
     setEndDate(med.endDate?.substring(0, 10) || "");
     setEditId(med._id);
     setShowForm(true);
+     setError("");
   };
 
  const handleDelete = (id) => {
@@ -83,9 +97,14 @@ const fetchMedications = useCallback(() => {
     .delete(`${process.env.REACT_APP_API_URL}/api/medications/${id}`, {
       headers: { Authorization: `Bearer ${storedToken}` },
     })
-    .then(() => fetchMedications())
-    .catch((err) => console.error("Failed to delete medication:", err.response || err.message));
-};
+   .then(() => {
+        fetchMedications();
+        setError("");
+      })
+      .catch(() => {
+        setError("Could not delete medication. Please try again.");
+      });
+  };
 
   const resetForm = () => {
     setName("");
@@ -95,6 +114,7 @@ const fetchMedications = useCallback(() => {
     setEndDate("");
     setEditId(null);
     setShowForm(false);
+      setError("");
   };
 
   const currentMeds = medications.filter(
@@ -167,6 +187,13 @@ const fetchMedications = useCallback(() => {
       >
         Medication
       </Typography>
+
+  {/* Minimalistische error */}
+      {error && (
+        <Typography color="error" sx={{ mb: 2, fontSize: "1rem" }}>
+          {error}
+        </Typography>
+      )}
 
       {!showForm && (
         <Box display="flex" justifyContent="flex-start" mb={3}>
