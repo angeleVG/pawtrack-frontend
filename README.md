@@ -112,9 +112,9 @@
   <li><strong>Frontend Repo:</strong> <a href="https://github.com/yourusername/pawtrack-frontend" target="_blank">github.com/yourusername/pawtrack-frontend</a></li>
   <li><strong>Backend Repo:</strong> <a href="https://github.com/yourusername/pawtrack-backend" target="_blank">github.com/yourusername/pawtrack-backend</a></li>
   <li><strong>Live App:</strong> <a href="https://pawtrack.netlify.app" target="_blank">pawtrack.netlify.app</a></li>
- <li><strong>Trello:</strong> <a href="https://trello.com/invite/b/684dbd1b7b6729ce52eed4cd/ATTId945596664ba07b100d2b6a7350aa4bcA46DE929/pawtrack" target="_blank">Trello board Link</a></li>
+ <li><strong>Trello:</strong> <a href="https://trello.com/invite/b/684dbd1b7b6729ce52eed4cd/ATTId945596664ba07b100d2b6a7350aa4bcA46DE929/pawtrack" target="_blank">trello board Link</a></li>
  <li><strong>Presentation slides:</strong> <a href="https://www.canva.com/design/DAGs5Xs-N4M/q1ESj9d2Yg5DdFo-_DTxcw/view?utm_content=DAGs5Xs-N4M&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=hd269b07db0" target="_blank">
-  Canva Presentation</a></li>
+  canva Presentation</a></li>
 </ul>
 <p>
   <strong>Avatar Icon:</strong> Pet avatar illustrations by <a href="https://www.flaticon.com/" target="_blank">Freepik - Flaticon</a>.
