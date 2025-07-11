@@ -188,7 +188,6 @@ const fetchMedications = useCallback(() => {
         Medication
       </Typography>
 
-  {/* Minimalistische error */}
       {error && (
         <Typography color="error" sx={{ mb: 2, fontSize: "1rem" }}>
           {error}

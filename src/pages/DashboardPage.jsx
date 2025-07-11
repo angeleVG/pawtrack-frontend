@@ -163,8 +163,7 @@ const handleImageUpload = (e) => {
 </Tooltip>
 
           <Typography variant="h5" align="center" sx={{ color: "#00bfa6", fontWeight: 600 }}>{pet.name}</Typography>
-          <Typography variant="body1" align="center" color="text.secondary"> {pet.gender} •
-            {pet.breed}, Birthday: {new Date(pet.birthDate).toLocaleDateString()}
+          <Typography variant="body1" align="center" color="text.secondary"> {pet.breed}, Birthday: {new Date(pet.birthDate).toLocaleDateString()}
           </Typography>
           </Box>
 

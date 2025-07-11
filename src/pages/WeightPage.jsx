@@ -30,6 +30,7 @@ function WeightPage() {
 
 
   const storedToken = localStorage.getItem("authToken");
+const [error, setError] = useState("");
 
 const fetchWeights = useCallback(async () => {
   try {
@@ -37,11 +38,13 @@ const fetchWeights = useCallback(async () => {
       headers: { Authorization: `Bearer ${storedToken}` },
     });
     setWeights(Array.isArray(res.data) ? res.data : []);
+    setError(""); 
   } catch (err) {
-    console.error("Error fetching weights:", err);
+    setError("Failed to load weights.");
     setWeights([]);
   }
-}, [storedToken]); 
+}, [storedToken]);
+
 
   useEffect(() => {
     fetchWeights();
@@ -49,6 +52,7 @@ const fetchWeights = useCallback(async () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+     setError(""); 
     try {
       await axios.post(`${API_URL}/api/weight`,
         { value: newWeight },
@@ -60,18 +64,19 @@ const fetchWeights = useCallback(async () => {
       setShowForm(false);
       fetchWeights();
     } catch (err) {
-      console.error("Error submitting weight:", err);
+      setError("Failed to add weight. Please try again.");
     }
   };
 
 const handleDelete = async (id) => {
+   setError("");
   try {
     await axios.delete(`${API_URL}/api/weight/${id}`, {
       headers: { Authorization: `Bearer ${storedToken}` },
     });
     fetchWeights(); // Refresh list 
   } catch (err) {
-    console.error("Error deleting weight:", err);
+   setError("Failed to delete weight.");
   }
 };
 
@@ -89,6 +94,12 @@ const handleDelete = async (id) => {
       <Typography variant="h5" fontWeight="bold" color="#00bfa6">
         Weight
       </Typography>
+
+{error && (
+  <Typography color="error" sx={{ mb: 2, fontSize: "1rem" }}>
+    {error}
+  </Typography>
+)}
 
       {weights.length > 0 && (
         <>

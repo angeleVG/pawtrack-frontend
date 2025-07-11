@@ -41,6 +41,7 @@ function VaccinationPage() {
   });
 
   const storedToken = localStorage.getItem("authToken");
+ const [error, setError] = useState("");
 
  useEffect(() => {
   if (!petId) return;
@@ -48,8 +49,14 @@ function VaccinationPage() {
     .get(`${process.env.REACT_APP_API_URL}/api/vaccination/pet/${petId}`, {
       headers: { Authorization: `Bearer ${storedToken}` }
     })
-    .then(res => setVaccinations(res.data))
-    .catch(() => setVaccinations([]));
+    .then(res => {
+      setVaccinations(res.data);
+      setError("");
+    })
+    .catch(() => {
+      setVaccinations([]);
+      setError("Failed to load vaccinations.");
+    });
 }, [petId, storedToken]);
 
   const resetForm = () => {
@@ -62,10 +69,13 @@ function VaccinationPage() {
       notes: ""
     });
     setEditId(null);
+      setError("");
   };
+
 
 const handleSubmit = async e => {
   e.preventDefault();
+    setError("");
   try {
     if (editId) {
       await axios.put(
@@ -87,11 +97,11 @@ const handleSubmit = async e => {
     setVaccinations(res.data);
     setShowForm(false);
     resetForm();
+       setError("");
   } catch (err) {
-    console.error("Failed to save vaccination:", err);
+      setError("Failed to save vaccination. Please try again.");
   }
 };
-
 
 
   const handleEdit = vax => {
@@ -108,12 +118,18 @@ const handleSubmit = async e => {
   };
 
   const handleDelete = async id => {
-    if (!window.confirm("Are you sure you want to delete this vaccination?")) return;
+  if (!window.confirm("Are you sure you want to delete this vaccination?")) return;
+  setError("");
+  try {
     await axios.delete(`${process.env.REACT_APP_API_URL}/api/vaccination/${id}`, {
       headers: { Authorization: `Bearer ${storedToken}` }
     });
     setVaccinations(vaccinations => vaccinations.filter(v => v._id !== id));
-  };
+    setError("");
+  } catch {
+    setError("Failed to delete vaccination.");
+  }
+};
 
   return (
     <Box
@@ -128,6 +144,12 @@ const handleSubmit = async e => {
       <Typography variant="h5" fontWeight={600} color={COLORS.blueGray} mb={2}>
         Vaccinations
       </Typography>
+
+{error && (
+  <Typography color="error" sx={{ mb: 2, fontSize: "1rem" }}>
+    {error}
+  </Typography>
+)}
 
       {!showForm && (
         <Button
@@ -147,7 +169,7 @@ const handleSubmit = async e => {
           }}
           fullWidth
         >
-          + Add vaccination
+          Add vaccination
         </Button>
       )}
 
